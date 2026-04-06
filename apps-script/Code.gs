@@ -249,124 +249,125 @@ var LOGO_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwAAAALbCAYAAABND+
 
 /**
  * Builds the HTML for a single child's VBS pass.
- * Jungle Safari theme — replicates approved design template.
- * Two-column table: dark-green stub (left) + sage-green body (right).
- * GAS PDF renderer: table layout only, no flexbox.
+ * Jungle Safari theme — v8: explicit row heights, no empty gap.
+ * Page: 210mm x 118mm. Right body rows sum to ~446px.
  */
 function buildPassHtml(childName, childAge, picnicConsent, submissionId) {
   var picnicActive = (picnicConsent === 'Yes');
 
   var PICNIC_TD = picnicActive
-    ? '<td style="background:#c9a227;height:30px;text-align:center;vertical-align:middle;'
+    ? '<td style="background:#c9a227;height:34px;text-align:center;vertical-align:middle;'
       + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
-      + '<span style="font-size:9px;font-weight:bold;color:#fff;letter-spacing:2px;">'
+      + '<span style="font-size:10px;font-weight:bold;color:#fff;letter-spacing:2px;">'
       + '&#9670; DAY 5 &mdash; FULL DAY PICNIC PASS &#9670;</span></td>'
-    : '<td style="background:#888;height:30px;text-align:center;vertical-align:middle;'
+    : '<td style="background:#999;height:34px;text-align:center;vertical-align:middle;'
       + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
-      + '<span style="font-size:9px;font-weight:bold;color:#ccc;letter-spacing:2px;text-decoration:line-through;">'
+      + '<span style="font-size:10px;font-weight:bold;color:#ccc;letter-spacing:2px;text-decoration:line-through;">'
       + 'DAY 5 &mdash; FULL DAY PICNIC PASS</span></td>';
 
-  // Left stub: subtle leaf/vine watermark behind content
-  var STUB_BG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 354" width="186" height="354" '
+  // Left stub: vine/leaf background watermark
+  var STUB_BG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 446" width="186" height="446" '
     + 'style="position:absolute;top:0;left:0;" fill="none">'
     + '<ellipse cx="20" cy="40" rx="42" ry="16" transform="rotate(-30 20 40)" fill="#0f3d22" opacity="0.65"/>'
     + '<ellipse cx="168" cy="28" rx="40" ry="15" transform="rotate(25 168 28)" fill="#0f3d22" opacity="0.65"/>'
-    + '<ellipse cx="8"  cy="105" rx="36" ry="13" transform="rotate(-50 8 105)"  fill="#0a3018" opacity="0.45"/>'
-    + '<ellipse cx="178" cy="115" rx="37" ry="14" transform="rotate(42 178 115)" fill="#0a3018" opacity="0.45"/>'
-    + '<ellipse cx="14" cy="230" rx="35" ry="13" transform="rotate(-35 14 230)" fill="#0f3d22" opacity="0.5"/>'
-    + '<ellipse cx="172" cy="240" rx="34" ry="13" transform="rotate(28 172 240)" fill="#0f3d22" opacity="0.5"/>'
-    + '<ellipse cx="18" cy="320" rx="40" ry="15" transform="rotate(-22 18 320)" fill="#0a3018" opacity="0.5"/>'
-    + '<ellipse cx="170" cy="340" rx="38" ry="14" transform="rotate(18 170 340)" fill="#0a3018" opacity="0.5"/>'
-    + '<path d="M5 0 Q16 85 5 165 Q19 248 5 354"  stroke="#0a3018" stroke-width="2.5" fill="none" opacity="0.55"/>'
-    + '<path d="M181 0 Q167 85 181 165 Q164 248 181 354" stroke="#0a3018" stroke-width="2.5" fill="none" opacity="0.55"/>'
+    + '<ellipse cx="8"  cy="130" rx="36" ry="13" transform="rotate(-50 8 130)" fill="#0a3018" opacity="0.45"/>'
+    + '<ellipse cx="178" cy="145" rx="37" ry="14" transform="rotate(42 178 145)" fill="#0a3018" opacity="0.45"/>'
+    + '<ellipse cx="14" cy="290" rx="35" ry="13" transform="rotate(-35 14 290)" fill="#0f3d22" opacity="0.5"/>'
+    + '<ellipse cx="172" cy="310" rx="34" ry="13" transform="rotate(28 172 310)" fill="#0f3d22" opacity="0.5"/>'
+    + '<ellipse cx="18" cy="410" rx="40" ry="15" transform="rotate(-22 18 410)" fill="#0a3018" opacity="0.5"/>'
+    + '<path d="M5 0 Q16 100 5 200 Q19 310 5 446" stroke="#0a3018" stroke-width="2.5" fill="none" opacity="0.55"/>'
+    + '<path d="M181 0 Q167 100 181 200 Q164 310 181 446" stroke="#0a3018" stroke-width="2.5" fill="none" opacity="0.55"/>'
     + '</svg>';
 
-  // Right body: leaf clusters at top-left and top-right corners
-  var LEAF_TL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 75" width="95" height="75" '
+  // Right body: leaf clusters top corners
+  var LEAF_TL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80" '
     + 'style="position:absolute;top:0;left:0;z-index:0;">'
-    + '<ellipse cx="-6" cy="28" rx="46" ry="16" transform="rotate(-34 -6 28)" fill="#4a9140" opacity="0.85"/>'
-    + '<ellipse cx="22" cy="-6" rx="42" ry="15" transform="rotate(-14 22 -6)" fill="#2d6e25" opacity="0.92"/>'
-    + '<ellipse cx="-9" cy="58" rx="33" ry="12" transform="rotate(-56 -9 58)" fill="#5ca855" opacity="0.75"/>'
+    + '<ellipse cx="-6" cy="28" rx="48" ry="17" transform="rotate(-34 -6 28)" fill="#4a9140" opacity="0.85"/>'
+    + '<ellipse cx="24" cy="-6" rx="44" ry="16" transform="rotate(-14 24 -6)" fill="#2d6e25" opacity="0.92"/>'
+    + '<ellipse cx="-10" cy="60" rx="35" ry="13" transform="rotate(-56 -10 60)" fill="#5ca855" opacity="0.75"/>'
     + '</svg>';
 
-  var LEAF_TR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 75" width="95" height="75" '
+  var LEAF_TR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80" '
     + 'style="position:absolute;top:0;right:0;z-index:0;">'
-    + '<ellipse cx="101" cy="28" rx="46" ry="16" transform="rotate(34 101 28)" fill="#4a9140" opacity="0.85"/>'
-    + '<ellipse cx="73"  cy="-6" rx="42" ry="15" transform="rotate(14 73 -6)"  fill="#2d6e25" opacity="0.92"/>'
-    + '<ellipse cx="104" cy="58" rx="33" ry="12" transform="rotate(56 104 58)" fill="#5ca855" opacity="0.75"/>'
+    + '<ellipse cx="106" cy="28" rx="48" ry="17" transform="rotate(34 106 28)" fill="#4a9140" opacity="0.85"/>'
+    + '<ellipse cx="76"  cy="-6" rx="44" ry="16" transform="rotate(14 76 -6)"  fill="#2d6e25" opacity="0.92"/>'
+    + '<ellipse cx="110" cy="60" rx="35" ry="13" transform="rotate(56 110 60)" fill="#5ca855" opacity="0.75"/>'
     + '</svg>';
 
-  // Calendar icon (SVG inline)
-  var CAL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="18" height="18" '
-    + 'style="display:inline-block;vertical-align:middle;margin-right:4px;">'
-    + '<rect x="1" y="3" width="20" height="17" rx="2" fill="#c9a227" opacity="0.18"/>'
+  // Calendar icon
+  var CAL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="20" height="20" '
+    + 'style="display:inline-block;vertical-align:middle;margin-right:5px;">'
+    + '<rect x="1" y="3" width="20" height="17" rx="2" fill="#c9a227" opacity="0.2"/>'
     + '<rect x="1" y="3" width="20" height="17" rx="2" fill="none" stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<line x1="1"  y1="8" x2="21" y2="8"  stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<line x1="7"  y1="1" x2="7"  y2="5"  stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<line x1="15" y1="1" x2="15" y2="5"  stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<rect x="4"   y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
+    + '<line x1="1" y1="8" x2="21" y2="8" stroke="#3d7a33" stroke-width="1.5"/>'
+    + '<line x1="7" y1="1" x2="7" y2="5" stroke="#3d7a33" stroke-width="1.5"/>'
+    + '<line x1="15" y1="1" x2="15" y2="5" stroke="#3d7a33" stroke-width="1.5"/>'
+    + '<rect x="4" y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
     + '<rect x="9.5" y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
-    + '<rect x="15"  y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
+    + '<rect x="15" y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
     + '</svg>';
 
-  // Map pin icon (SVG inline)
-  var PIN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="18" height="18" '
-    + 'style="display:inline-block;vertical-align:middle;margin-right:4px;">'
+  // Map pin icon
+  var PIN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="20" height="20" '
+    + 'style="display:inline-block;vertical-align:middle;margin-right:5px;">'
     + '<path d="M11 1C7.5 1 4.5 4.1 4.5 8C4.5 13 11 21 11 21S17.5 13 17.5 8C17.5 4.1 14.5 1 11 1z" fill="#c9a227"/>'
     + '<circle cx="11" cy="8" r="2.6" fill="#fff"/>'
     + '</svg>';
 
-  // Jungle animal scene — elephant, two palms, monkey, giraffe, bushes, sun
-  var JUNGLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 92" width="100%" height="82" style="display:block;">'
-    // ground
-    + '<rect x="0" y="64" width="480" height="28" fill="#c8e6b0"/>'
-    // ── left bush ──
-    + '<ellipse cx="26" cy="68" rx="28" ry="18" fill="#5ca050"/>'
-    + '<ellipse cx="50" cy="65" rx="22" ry="15" fill="#4a8c3f"/>'
+  // Jungle scene: viewBox 0 0 480 160, animals larger & centered
+  var JUNGLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" '
+    + 'width="100%" height="152" style="display:block;">'
+    // sky/fill
+    + '<rect x="0" y="0" width="480" height="160" fill="#eef5e6"/>'
+    // ground strip
+    + '<rect x="0" y="112" width="480" height="48" fill="#c8e6b0"/>'
+    // ── left bush cluster ──
+    + '<ellipse cx="30"  cy="118" rx="35" ry="24" fill="#5ca050"/>'
+    + '<ellipse cx="62"  cy="114" rx="28" ry="20" fill="#4a8c3f"/>'
+    + '<ellipse cx="86"  cy="120" rx="22" ry="16" fill="#5ca050"/>'
     // ── palm tree 1 ──
-    + '<rect x="99" y="30" width="8" height="38" fill="#7a4f28"/>'
-    + '<ellipse cx="103" cy="27" rx="26" ry="11" transform="rotate(-26 103 27)" fill="#4a8c3f"/>'
-    + '<ellipse cx="103" cy="24" rx="24" ry="10" transform="rotate(18 103 24)"  fill="#5ca050"/>'
-    + '<ellipse cx="103" cy="21" rx="20" ry="9"  transform="rotate(-6 103 21)"  fill="#3d7535"/>'
-    + '<circle cx="105" cy="31" r="4" fill="#7a4f28"/>'
+    + '<rect x="132" y="52" width="10" height="65" fill="#7a4f28"/>'
+    + '<ellipse cx="137" cy="48" rx="32" ry="14" transform="rotate(-26 137 48)" fill="#4a8c3f"/>'
+    + '<ellipse cx="137" cy="43" rx="28" ry="12" transform="rotate(18 137 43)"  fill="#5ca050"/>'
+    + '<ellipse cx="137" cy="38" rx="24" ry="11" transform="rotate(-6 137 38)"  fill="#3d7535"/>'
+    + '<circle cx="140" cy="54" r="5.5" fill="#7a4f28"/>'
     // ── elephant ──
-    + '<ellipse cx="167" cy="58" rx="31" ry="20" fill="#909090"/>'
-    + '<ellipse cx="152" cy="46" rx="16" ry="13" fill="#909090"/>'
-    + '<path d="M143 53 Q133 64 137 72 Q139 76 143 72 Q141 63 150 56" fill="#909090"/>'
-    + '<ellipse cx="149" cy="44" rx="10" ry="6" transform="rotate(-12 149 44)" fill="#adadad"/>'
-    + '<circle cx="154" cy="44" r="2" fill="#333"/>'
-    + '<rect x="150" y="74" width="6" height="10" rx="1" fill="#7a7a7a"/>'
-    + '<rect x="162" y="74" width="6" height="10" rx="1" fill="#7a7a7a"/>'
-    + '<rect x="173" y="74" width="6" height="10" rx="1" fill="#7a7a7a"/>'
-    // ── palm tree 2 (taller, centre) ──
-    + '<rect x="247" y="18" width="9" height="50" fill="#7a4f28"/>'
-    + '<ellipse cx="251" cy="15" rx="28" ry="12" transform="rotate(-22 251 15)" fill="#4a8c3f"/>'
-    + '<ellipse cx="251" cy="12" rx="26" ry="11" transform="rotate(20 251 12)"  fill="#5ca050"/>'
-    + '<ellipse cx="251" cy="9"  rx="22" ry="10" transform="rotate(-8 251 9)"   fill="#3d7535"/>'
-    + '<circle cx="252" cy="21" r="4.5" fill="#7a4f28"/>'
+    + '<ellipse cx="218" cy="100" rx="38" ry="26" fill="#909090"/>'
+    + '<ellipse cx="198" cy="82"  rx="20" ry="17" fill="#909090"/>'
+    + '<path d="M187 90 Q175 106 180 116 Q183 121 188 116 Q185 105 197 94" fill="#909090"/>'
+    + '<ellipse cx="196" cy="79" rx="13" ry="8" transform="rotate(-12 196 79)" fill="#adadad"/>'
+    + '<circle cx="203" cy="79" r="2.5" fill="#333"/>'
+    + '<rect x="198" y="120" width="8" height="14" rx="2" fill="#7a7a7a"/>'
+    + '<rect x="212" y="120" width="8" height="14" rx="2" fill="#7a7a7a"/>'
+    + '<rect x="226" y="120" width="8" height="14" rx="2" fill="#7a7a7a"/>'
+    // ── palm tree 2 ──
+    + '<rect x="290" y="42" width="11" height="75" fill="#7a4f28"/>'
+    + '<ellipse cx="295" cy="38" rx="34" ry="15" transform="rotate(-22 295 38)" fill="#4a8c3f"/>'
+    + '<ellipse cx="295" cy="33" rx="30" ry="13" transform="rotate(20 295 33)"  fill="#5ca050"/>'
+    + '<ellipse cx="295" cy="28" rx="26" ry="12" transform="rotate(-8 295 28)"  fill="#3d7535"/>'
+    + '<circle cx="295" cy="44" r="5.5" fill="#7a4f28"/>'
     // ── monkey on palm 2 ──
-    + '<ellipse cx="259" cy="40" rx="7" ry="8" fill="#7a4f28"/>'
-    + '<circle cx="259" cy="31" r="6.5" fill="#7a4f28"/>'
-    + '<circle cx="257" cy="30" r="1.8" fill="#222"/>'
-    + '<ellipse cx="259" cy="35" rx="3.5" ry="2.5" fill="#c4956a"/>'
-    + '<path d="M266 34 Q276 29 279 39" stroke="#7a4f28" stroke-width="2.5" fill="none"/>'
+    + '<ellipse cx="304" cy="68" rx="9" ry="11" fill="#7a4f28"/>'
+    + '<circle cx="304" cy="56" r="8.5" fill="#7a4f28"/>'
+    + '<circle cx="302" cy="54" r="2.2" fill="#222"/>'
+    + '<ellipse cx="304" cy="60" rx="4.5" ry="3.2" fill="#c4956a"/>'
+    + '<path d="M313 61 Q325 55 330 68" stroke="#7a4f28" stroke-width="3" fill="none"/>'
     // ── giraffe ──
-    + '<rect x="320" y="14" width="11" height="52" fill="#e8a030"/>'
-    + '<ellipse cx="325" cy="12" rx="9" ry="7.5" fill="#e8a030"/>'
-    + '<ellipse cx="343" cy="58" rx="18" ry="14" fill="#e8a030"/>'
-    + '<circle cx="322" cy="9" r="2" fill="#333"/>'
-    + '<line x1="323" y1="5" x2="323" y2="2" stroke="#e8a030" stroke-width="2.5"/>'
-    + '<rect x="336" y="70" width="5" height="16" rx="1" fill="#c8881a"/>'
-    + '<rect x="347" y="70" width="5" height="16" rx="1" fill="#c8881a"/>'
-    + '<ellipse cx="324" cy="28" rx="3"   ry="4"   fill="#c8881a"/>'
-    + '<ellipse cx="321" cy="40" rx="2.5" ry="3.5" fill="#c8881a"/>'
-    + '<ellipse cx="330" cy="36" rx="2.8" ry="3.5" fill="#c8881a"/>'
-    // ── right bushes ──
-    + '<ellipse cx="410" cy="67" rx="26" ry="17" fill="#5ca050"/>'
-    + '<ellipse cx="436" cy="65" rx="22" ry="15" fill="#4a8c3f"/>'
-    + '<ellipse cx="460" cy="68" rx="20" ry="14" fill="#5ca050"/>'
+    + '<rect x="372" y="28" width="14" height="72" fill="#e8a030"/>'
+    + '<ellipse cx="379" cy="26" rx="11" ry="9"  fill="#e8a030"/>'
+    + '<ellipse cx="395" cy="98" rx="22" ry="17" fill="#e8a030"/>'
+    + '<circle cx="375" cy="22" r="2.5" fill="#333"/>'
+    + '<line x1="377" y1="17" x2="377" y2="12" stroke="#c8881a" stroke-width="3"/>'
+    + '<rect x="387" y="112" width="6" height="22" rx="2" fill="#c8881a"/>'
+    + '<rect x="400" y="112" width="6" height="22" rx="2" fill="#c8881a"/>'
+    + '<ellipse cx="377" cy="46" rx="4"   ry="5"   fill="#c8881a"/>'
+    + '<ellipse cx="374" cy="62" rx="3.5" ry="4.5" fill="#c8881a"/>'
+    + '<ellipse cx="384" cy="56" rx="3.5" ry="4.5" fill="#c8881a"/>'
+    // ── right bush cluster ──
+    + '<ellipse cx="450" cy="118" rx="32" ry="22" fill="#5ca050"/>'
+    + '<ellipse cx="474" cy="115" rx="25" ry="18" fill="#4a8c3f"/>'
     // ── sun ──
-    + '<circle cx="452" cy="22" r="16" fill="#f5c830"/>'
+    + '<circle cx="452" cy="38" rx="22" ry="22" fill="#f5c830"/>'
     + '</svg>';
 
   return '<!DOCTYPE html><html><head><meta charset="UTF-8">'
@@ -385,38 +386,38 @@ function buildPassHtml(childName, childAge, picnicConsent, submissionId) {
     + STUB_BG
     + '<table width="100%" cellpadding="0" cellspacing="0" style="position:relative;z-index:1;">'
 
-    // logo badge
-    + '<tr><td style="text-align:center;padding:14px 0 5px;">'
-    + '<div style="width:65px;height:65px;border-radius:50%;background:#fff;border:2.5px solid #c9a227;'
+    // logo badge — 80px circle
+    + '<tr><td style="text-align:center;padding:14px 0 6px;">'
+    + '<div style="width:72px;height:72px;border-radius:50%;background:#fff;border:2.5px solid #c9a227;'
     + 'margin:0 auto;overflow:hidden;text-align:center;line-height:0;">'
-    + '<img src="' + LOGO_SRC + '" width="60" height="60" style="border-radius:50%;" />'
+    + '<img src="' + LOGO_SRC + '" width="67" height="67" style="border-radius:50%;" />'
     + '</div>'
     + '</td></tr>'
 
     // ADMISSION PASS pill
-    + '<tr><td style="text-align:center;padding:2px 12px 6px;">'
-    + '<div style="background:#155230;border:1px solid #c9a227;border-radius:3px;padding:3px 0;'
+    + '<tr><td style="text-align:center;padding:2px 12px 8px;">'
+    + '<div style="background:#155230;border:1px solid #c9a227;border-radius:3px;padding:4px 0;'
     + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
-    + '<span style="font-size:7px;font-weight:bold;color:#c9a227;letter-spacing:2.5px;">ADMISSION PASS</span>'
+    + '<span style="font-size:7.5px;font-weight:bold;color:#c9a227;letter-spacing:2.5px;">ADMISSION PASS</span>'
     + '</div>'
     + '</td></tr>'
 
-    // child name (auto-wrap for long names)
-    + '<tr><td style="text-align:center;padding:4px 10px 2px;">'
+    // child name
+    + '<tr><td style="text-align:center;padding:6px 10px 2px;">'
     + '<div style="font-size:20px;font-weight:900;color:#fff;line-height:1.1;'
     + 'text-transform:uppercase;word-break:break-word;">' + childName + '</div>'
     + '</td></tr>'
 
     // age
-    + '<tr><td style="text-align:center;padding:2px 8px 0;">'
-    + '<span style="font-size:11px;color:#c9a227;font-weight:bold;">Age: ' + childAge + '</span>'
+    + '<tr><td style="text-align:center;padding:3px 8px 0;">'
+    + '<span style="font-size:12px;color:#c9a227;font-weight:bold;">Age: ' + childAge + '</span>'
     + '</td></tr>'
 
-    // ref code at bottom
-    + '<tr><td style="text-align:center;padding:10px 8px 14px;">'
-    + '<div style="font-size:7.5px;color:#a8c8b8;line-height:1.8;">'
+    // ref code
+    + '<tr><td style="text-align:center;padding:12px 8px 14px;">'
+    + '<div style="font-size:8px;color:#a8c8b8;line-height:1.8;">'
     + 'Unique ID &amp;<br>'
-    + 'Ref Code: <strong style="color:#f0d050;font-size:8px;">' + submissionId + '</strong>'
+    + 'Ref Code: <strong style="color:#f0d050;font-size:8.5px;">' + submissionId + '</strong>'
     + '</div>'
     + '</td></tr>'
 
@@ -427,34 +428,34 @@ function buildPassHtml(childName, childAge, picnicConsent, submissionId) {
     + '<td style="background:#eef5e6;vertical-align:top;position:relative;overflow:hidden;'
     + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
     + LEAF_TL + LEAF_TR
-    + '<table width="100%" style="height:118mm;" cellpadding="0" cellspacing="0">'
+    // inner table with explicit row heights that sum to ~446px (118mm)
+    + '<table width="100%" cellpadding="0" cellspacing="0">'
 
-    // church name + JUNGLE SAFARI + VBS tagline
-    + '<tr><td style="text-align:center;padding:10px 55px 0;position:relative;z-index:1;">'
-    + '<div style="font-size:7.5px;color:#2d5a1b;letter-spacing:3px;font-weight:bold;text-transform:uppercase;">'
-    + 'El Bethel AG International Church</div>'
-    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:34px;font-weight:bold;'
-    + 'color:#1a5c38;line-height:0.95;text-transform:uppercase;letter-spacing:3px;margin:3px 0 0;">JUNGLE</div>'
-    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:34px;font-weight:bold;'
-    + 'color:#1a5c38;line-height:0.95;text-transform:uppercase;letter-spacing:3px;margin:0 0 4px;">SAFARI</div>'
-    + '<div style="font-size:8.5px;color:#2d5a1b;letter-spacing:2px;font-weight:bold;">VACATION BIBLE SCHOOL 2026</div>'
+    // row 1: header — 166px
+    + '<tr><td style="height:166px;text-align:center;padding:14px 60px 0;vertical-align:top;position:relative;z-index:1;">'
+    + '<div style="font-size:7.5px;color:#2d5a1b;letter-spacing:3px;font-weight:bold;">EL BETHEL AG INTERNATIONAL CHURCH</div>'
+    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:46px;font-weight:bold;'
+    + 'color:#1a5c38;line-height:0.92;text-transform:uppercase;letter-spacing:3px;margin:4px 0 0;">JUNGLE</div>'
+    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:46px;font-weight:bold;'
+    + 'color:#1a5c38;line-height:0.92;text-transform:uppercase;letter-spacing:3px;margin:0 0 6px;">SAFARI</div>'
+    + '<div style="font-size:9px;color:#2d5a1b;letter-spacing:2px;font-weight:bold;">VACATION BIBLE SCHOOL 2026</div>'
     + '</td></tr>'
 
-    // WHEN / WHERE two-column
-    + '<tr><td style="padding:7px 14px 4px;position:relative;z-index:1;">'
+    // row 2: WHEN / WHERE — 94px
+    + '<tr><td style="height:94px;padding:10px 16px;vertical-align:top;position:relative;z-index:1;">'
     + '<table width="100%" cellpadding="0" cellspacing="0"><tr>'
-    + '<td style="width:48%;vertical-align:top;padding-right:10px;">'
-    + '<div style="margin-bottom:3px;">' + CAL
-    + '<span style="font-size:9px;font-weight:bold;color:#2d5a1b;letter-spacing:1px;vertical-align:middle;">WHEN</span></div>'
-    + '<div style="font-size:8px;color:#444;line-height:1.5;padding-left:2px;">'
+    + '<td style="width:48%;vertical-align:top;padding-right:12px;">'
+    + '<div style="margin-bottom:4px;">' + CAL
+    + '<span style="font-size:10px;font-weight:bold;color:#2d5a1b;letter-spacing:1px;vertical-align:middle;">WHEN</span></div>'
+    + '<div style="font-size:8.5px;color:#444;line-height:1.6;padding-left:2px;">'
     + 'Date: <strong>May 11 &ndash; 15, 2026</strong><br>'
     + 'Time: 10:00 AM &ndash; 1:00 PM'
     + '</div>'
     + '</td>'
-    + '<td style="width:52%;vertical-align:top;padding-left:10px;">'
-    + '<div style="margin-bottom:3px;">' + PIN
-    + '<span style="font-size:9px;font-weight:bold;color:#2d5a1b;letter-spacing:1px;vertical-align:middle;">WHERE</span></div>'
-    + '<div style="font-size:7.5px;color:#444;line-height:1.5;padding-left:2px;">'
+    + '<td style="width:52%;vertical-align:top;padding-left:12px;">'
+    + '<div style="margin-bottom:4px;">' + PIN
+    + '<span style="font-size:10px;font-weight:bold;color:#2d5a1b;letter-spacing:1px;vertical-align:middle;">WHERE</span></div>'
+    + '<div style="font-size:8px;color:#444;line-height:1.6;padding-left:2px;">'
     + '107, 5th Cross Rd, Chinnapanahalli<br>'
     + 'Main Rd, Marathahalli,<br>'
     + 'Bengaluru 560037'
@@ -463,12 +464,12 @@ function buildPassHtml(childName, childAge, picnicConsent, submissionId) {
     + '</tr></table>'
     + '</td></tr>'
 
-    // jungle scene (fills remaining height)
-    + '<tr><td style="vertical-align:bottom;padding:0;height:100%;">'
+    // row 3: jungle animals — 152px
+    + '<tr><td style="height:152px;padding:0;vertical-align:bottom;">'
     + JUNGLE
     + '</td></tr>'
 
-    // picnic band
+    // row 4: picnic band — 34px
     + '<tr>' + PICNIC_TD + '</tr>'
 
     + '</table>'

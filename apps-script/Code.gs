@@ -252,210 +252,351 @@ var LOGO_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwAAAALbCAYAAABND+
  * Jungle Safari theme — v8: explicit row heights, no empty gap.
  * Page: 210mm x 118mm. Right body rows sum to ~446px.
  */
+
+/**
+ * Builds the HTML for a single child's VBS pass.
+ * Replicates the reference template exactly.
+ * Page: 210mm x 110mm (2.4:1 ratio matching reference).
+ */
 function buildPassHtml(childName, childAge, picnicConsent, submissionId) {
   var picnicActive = (picnicConsent === 'Yes');
 
-  var PICNIC_TD = picnicActive
-    ? '<td style="background:#c9a227;height:34px;text-align:center;vertical-align:middle;'
+  // Bottom band
+  var BAND_TD = picnicActive
+    ? '<td style="background:#c9a227;height:36px;text-align:center;vertical-align:middle;'
       + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
-      + '<span style="font-size:10px;font-weight:bold;color:#fff;letter-spacing:2px;">'
+      + '<span style="font-size:11px;font-weight:bold;color:#fff;letter-spacing:2px;">'
       + '&#9670; DAY 5 &mdash; FULL DAY PICNIC PASS &#9670;</span></td>'
-    : '<td style="background:#999;height:34px;text-align:center;vertical-align:middle;'
+    : '<td style="background:#c9a227;height:36px;text-align:center;vertical-align:middle;'
       + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
-      + '<span style="font-size:10px;font-weight:bold;color:#ccc;letter-spacing:2px;text-decoration:line-through;">'
-      + 'DAY 5 &mdash; FULL DAY PICNIC PASS</span></td>';
+      + '<span style="font-size:12px;font-weight:bold;color:#2d5a1b;letter-spacing:2px;">'
+      + 'VBS 2026 FULL ACCESS</span></td>';
 
-  // Left stub: vine/leaf background watermark
-  var STUB_BG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 446" width="186" height="446" '
-    + 'style="position:absolute;top:0;left:0;" fill="none">'
-    + '<ellipse cx="20" cy="40" rx="42" ry="16" transform="rotate(-30 20 40)" fill="#0f3d22" opacity="0.65"/>'
-    + '<ellipse cx="168" cy="28" rx="40" ry="15" transform="rotate(25 168 28)" fill="#0f3d22" opacity="0.65"/>'
-    + '<ellipse cx="8"  cy="130" rx="36" ry="13" transform="rotate(-50 8 130)" fill="#0a3018" opacity="0.45"/>'
-    + '<ellipse cx="178" cy="145" rx="37" ry="14" transform="rotate(42 178 145)" fill="#0a3018" opacity="0.45"/>'
-    + '<ellipse cx="14" cy="290" rx="35" ry="13" transform="rotate(-35 14 290)" fill="#0f3d22" opacity="0.5"/>'
-    + '<ellipse cx="172" cy="310" rx="34" ry="13" transform="rotate(28 172 310)" fill="#0f3d22" opacity="0.5"/>'
-    + '<ellipse cx="18" cy="410" rx="40" ry="15" transform="rotate(-22 18 410)" fill="#0a3018" opacity="0.5"/>'
-    + '<path d="M5 0 Q16 100 5 200 Q19 310 5 446" stroke="#0a3018" stroke-width="2.5" fill="none" opacity="0.55"/>'
-    + '<path d="M181 0 Q167 100 181 200 Q164 310 181 446" stroke="#0a3018" stroke-width="2.5" fill="none" opacity="0.55"/>'
+  // ── STUB background: dark monkey+vine silhouettes ─────────────────────────
+  var STUB_BG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 234 416" width="234" height="416" '
+    + 'style="position:absolute;top:0;left:0;pointer-events:none;">'
+    // deep vine lines
+    + '<path d="M30 0 Q20 60 30 120 Q18 200 28 280 Q15 350 25 416" stroke="#0f3d1e" stroke-width="3" fill="none" opacity="0.7"/>'
+    + '<path d="M190 0 Q205 80 195 160 Q210 240 198 320 Q208 370 200 416" stroke="#0f3d1e" stroke-width="3" fill="none" opacity="0.5"/>'
+    // hanging leaves on left vine
+    + '<ellipse cx="30"  cy="55"  rx="28" ry="10" transform="rotate(-40 30 55)"  fill="#0f3d1e" opacity="0.6"/>'
+    + '<ellipse cx="25"  cy="120" rx="26" ry="10" transform="rotate(35 25 120)"  fill="#0f3d1e" opacity="0.55"/>'
+    + '<ellipse cx="32"  cy="200" rx="30" ry="11" transform="rotate(-30 32 200)" fill="#0a2e15" opacity="0.5"/>'
+    + '<ellipse cx="22"  cy="290" rx="28" ry="10" transform="rotate(40 22 290)"  fill="#0f3d1e" opacity="0.55"/>'
+    + '<ellipse cx="28"  cy="370" rx="26" ry="10" transform="rotate(-25 28 370)" fill="#0a2e15" opacity="0.5"/>'
+    // monkey silhouette (right-center area)
+    + '<ellipse cx="170" cy="200" rx="22" ry="18" fill="#0a2e15" opacity="0.35"/>'
+    + '<circle  cx="170" cy="181" r="14"           fill="#0a2e15" opacity="0.35"/>'
+    + '<ellipse cx="155" cy="175" rx="10" ry="6"   fill="#0a2e15" opacity="0.35"/>'
+    + '<path d="M148 185 Q140 200 148 210" stroke="#0a2e15" stroke-width="4" fill="none" opacity="0.35"/>'
+    + '<path d="M192 185 Q202 200 194 212" stroke="#0a2e15" stroke-width="4" fill="none" opacity="0.35"/>'
+    // second monkey silhouette (lower)
+    + '<ellipse cx="60"  cy="350" rx="18" ry="15" fill="#0a2e15" opacity="0.3"/>'
+    + '<circle  cx="60"  cy="334" r="11"           fill="#0a2e15" opacity="0.3"/>'
     + '</svg>';
 
-  // Right body: leaf clusters top corners
-  var LEAF_TL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80" '
-    + 'style="position:absolute;top:0;left:0;z-index:0;">'
-    + '<ellipse cx="-6" cy="28" rx="48" ry="17" transform="rotate(-34 -6 28)" fill="#4a9140" opacity="0.85"/>'
-    + '<ellipse cx="24" cy="-6" rx="44" ry="16" transform="rotate(-14 24 -6)" fill="#2d6e25" opacity="0.92"/>'
-    + '<ellipse cx="-10" cy="60" rx="35" ry="13" transform="rotate(-56 -10 60)" fill="#5ca855" opacity="0.75"/>'
+  // ── Stub top-left large tropical leaves ──────────────────────────────────
+  var STUB_LEAVES_TL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100" '
+    + 'style="position:absolute;top:0;left:0;z-index:2;">'
+    + '<path d="M0 0 Q30 20 20 60 Q10 80 0 70 Z" fill="#3d8a30"/>'
+    + '<path d="M0 0 Q50 10 55 45 Q45 65 25 55 Q5 42 0 0 Z" fill="#4a9a3a"/>'
+    + '<path d="M0 0 Q60 -5 70 30 Q65 55 40 48 Q15 40 0 0 Z" fill="#2d7025"/>'
+    + '<path d="M0 0 Q35 -8 50 15 Q50 35 30 32 Q10 28 0 0 Z" fill="#5cb048" opacity="0.8"/>'
+    + '<path d="M5 0 Q15 30 5 70" stroke="#1a5020" stroke-width="1.5" fill="none" opacity="0.6"/>'
+    + '<path d="M25 0 Q40 15 35 48" stroke="#1a5020" stroke-width="1.5" fill="none" opacity="0.6"/>'
     + '</svg>';
 
-  var LEAF_TR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80" '
-    + 'style="position:absolute;top:0;right:0;z-index:0;">'
-    + '<ellipse cx="106" cy="28" rx="48" ry="17" transform="rotate(34 106 28)" fill="#4a9140" opacity="0.85"/>'
-    + '<ellipse cx="76"  cy="-6" rx="44" ry="16" transform="rotate(14 76 -6)"  fill="#2d6e25" opacity="0.92"/>'
-    + '<ellipse cx="110" cy="60" rx="35" ry="13" transform="rotate(56 110 60)" fill="#5ca855" opacity="0.75"/>'
+  // ── Stub bottom-left large leaves ─────────────────────────────────────────
+  var STUB_LEAVES_BL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" width="120" height="90" '
+    + 'style="position:absolute;bottom:0;left:0;z-index:2;">'
+    + '<path d="M0 90 Q25 60 15 20 Q5 5 0 20 Z" fill="#3d8a30"/>'
+    + '<path d="M0 90 Q55 70 50 40 Q40 15 20 30 Q5 45 0 90 Z" fill="#4a9a3a"/>'
+    + '<path d="M0 90 Q65 82 60 55 Q52 30 30 48 Q10 62 0 90 Z" fill="#2d7025"/>'
+    + '<path d="M0 90 Q40 85 42 68 Q38 52 20 62 Q5 72 0 90 Z" fill="#5cb048" opacity="0.8"/>'
+    + '</svg>';
+
+  // ── Stub right-edge vine + monkey ─────────────────────────────────────────
+  var STUB_VINE_R = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 300" width="28" height="300" '
+    + 'style="position:absolute;right:0;top:80px;z-index:3;">'
+    + '<path d="M14 0 Q7 50 14 100 Q6 160 14 220 Q7 270 14 300" stroke="#1a5020" stroke-width="2.5" fill="none"/>'
+    + '<ellipse cx="14" cy="38"  rx="14" ry="5" transform="rotate(-35 14 38)"  fill="#2d8030"/>'
+    + '<ellipse cx="14" cy="85"  rx="13" ry="5" transform="rotate(40 14 85)"   fill="#2d8030"/>'
+    + '<ellipse cx="14" cy="175" rx="14" ry="5" transform="rotate(-30 14 175)" fill="#2d8030"/>'
+    + '<ellipse cx="14" cy="240" rx="12" ry="5" transform="rotate(35 14 240)"  fill="#2d8030"/>'
+    // monkey on vine
+    + '<ellipse cx="14" cy="128" rx="10" ry="11" fill="#8b5a2b"/>'
+    + '<circle  cx="14" cy="117" r="8"            fill="#8b5a2b"/>'
+    + '<ellipse cx="8"  cy="113" rx="5" ry="3"    fill="#a07040" opacity="0.7"/>'
+    + '<circle  cx="11" cy="115" r="1.5"           fill="#333"/>'
+    + '<path d="M24 120 Q30 115 28 125" stroke="#8b5a2b" stroke-width="2.5" fill="none"/>'
+    + '<path d="M4  124 Q-3 130 2 138"  stroke="#8b5a2b" stroke-width="2.5" fill="none"/>'
+    + '</svg>';
+
+  // ── Right body: top-right large leaf cluster ──────────────────────────────
+  var RIGHT_LEAVES_TR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 100" width="130" height="100" '
+    + 'style="position:absolute;top:0;right:0;z-index:2;">'
+    + '<path d="M130 0 Q100 20 108 60 Q118 80 130 70 Z" fill="#3d8a30"/>'
+    + '<path d="M130 0 Q80 12 74 46 Q82 66 108 56 Q128 42 130 0 Z" fill="#4a9a3a"/>'
+    + '<path d="M130 0 Q68 -4 60 30 Q65 56 92 48 Q118 38 130 0 Z" fill="#2d7025"/>'
+    + '<path d="M130 0 Q95 -8 80 16 Q80 36 100 32 Q122 28 130 0 Z" fill="#5cb048" opacity="0.8"/>'
+    + '<path d="M128 0 Q118 28 125 68" stroke="#1a5020" stroke-width="1.5" fill="none" opacity="0.6"/>'
+    + '<path d="M108 0 Q95 18 90 46" stroke="#1a5020" stroke-width="1.5" fill="none" opacity="0.6"/>'
+    // butterfly
+    + '<ellipse cx="72" cy="18" rx="8" ry="5" transform="rotate(-30 72 18)" fill="#e8883a" opacity="0.85"/>'
+    + '<ellipse cx="82" cy="16" rx="6" ry="4" transform="rotate(25 82 16)"  fill="#e8a040" opacity="0.85"/>'
+    + '<line x1="77" y1="14" x2="77" y2="22" stroke="#555" stroke-width="0.8"/>'
+    + '</svg>';
+
+  // ── Small flower/leaf accents near JUNGLE SAFARI title ────────────────────
+  var TITLE_DECO_L = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 80" width="40" height="80" '
+    + 'style="position:absolute;left:14px;top:28px;z-index:1;">'
+    + '<ellipse cx="20" cy="20" rx="18" ry="7" transform="rotate(-40 20 20)" fill="#4a9a3a" opacity="0.9"/>'
+    + '<ellipse cx="15" cy="45" rx="16" ry="6" transform="rotate(35 15 45)"  fill="#3d8a30" opacity="0.9"/>'
+    + '<ellipse cx="22" cy="68" rx="17" ry="6" transform="rotate(-25 22 68)" fill="#4a9a3a" opacity="0.8"/>'
+    + '</svg>';
+
+  var TITLE_DECO_R = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 80" width="40" height="80" '
+    + 'style="position:absolute;right:14px;top:28px;z-index:1;">'
+    + '<ellipse cx="20" cy="20" rx="18" ry="7" transform="rotate(40 20 20)"  fill="#4a9a3a" opacity="0.9"/>'
+    + '<ellipse cx="25" cy="45" rx="16" ry="6" transform="rotate(-35 25 45)" fill="#3d8a30" opacity="0.9"/>'
+    + '<ellipse cx="18" cy="68" rx="17" ry="6" transform="rotate(25 18 68)"  fill="#4a9a3a" opacity="0.8"/>'
+    + '</svg>';
+
+  // small flower near title
+  var FLOWER = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="16" height="16" '
+    + 'style="display:inline-block;vertical-align:middle;margin:0 3px;">'
+    + '<circle cx="10" cy="10" r="3" fill="#f5b830"/>'
+    + '<ellipse cx="10" cy="4"  rx="3" ry="4" fill="#e87030"/>'
+    + '<ellipse cx="10" cy="16" rx="3" ry="4" fill="#e87030"/>'
+    + '<ellipse cx="4"  cy="10" rx="4" ry="3" fill="#f0a040"/>'
+    + '<ellipse cx="16" cy="10" rx="4" ry="3" fill="#f0a040"/>'
     + '</svg>';
 
   // Calendar icon
-  var CAL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="20" height="20" '
-    + 'style="display:inline-block;vertical-align:middle;margin-right:5px;">'
-    + '<rect x="1" y="3" width="20" height="17" rx="2" fill="#c9a227" opacity="0.2"/>'
-    + '<rect x="1" y="3" width="20" height="17" rx="2" fill="none" stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<line x1="1" y1="8" x2="21" y2="8" stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<line x1="7" y1="1" x2="7" y2="5" stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<line x1="15" y1="1" x2="15" y2="5" stroke="#3d7a33" stroke-width="1.5"/>'
-    + '<rect x="4" y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
-    + '<rect x="9.5" y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
-    + '<rect x="15" y="11" width="3" height="3" rx="0.5" fill="#3d7a33"/>'
+  var CAL = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" '
+    + 'style="display:inline-block;vertical-align:middle;margin-right:6px;">'
+    + '<rect x="1" y="3" width="22" height="19" rx="2" fill="none" stroke="#3d7a33" stroke-width="1.8"/>'
+    + '<line x1="1" y1="9" x2="23" y2="9" stroke="#3d7a33" stroke-width="1.8"/>'
+    + '<line x1="7" y1="1" x2="7" y2="5" stroke="#3d7a33" stroke-width="1.8"/>'
+    + '<line x1="17" y1="1" x2="17" y2="5" stroke="#3d7a33" stroke-width="1.8"/>'
+    + '<rect x="4"  y="12" width="3.5" height="3" rx="0.5" fill="#3d7a33"/>'
+    + '<rect x="10" y="12" width="3.5" height="3" rx="0.5" fill="#3d7a33"/>'
+    + '<rect x="16" y="12" width="3.5" height="3" rx="0.5" fill="#3d7a33"/>'
+    + '<rect x="4"  y="17" width="3.5" height="3" rx="0.5" fill="#3d7a33"/>'
     + '</svg>';
 
   // Map pin icon
-  var PIN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="20" height="20" '
-    + 'style="display:inline-block;vertical-align:middle;margin-right:5px;">'
-    + '<path d="M11 1C7.5 1 4.5 4.1 4.5 8C4.5 13 11 21 11 21S17.5 13 17.5 8C17.5 4.1 14.5 1 11 1z" fill="#c9a227"/>'
-    + '<circle cx="11" cy="8" r="2.6" fill="#fff"/>'
+  var PIN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" '
+    + 'style="display:inline-block;vertical-align:middle;margin-right:6px;">'
+    + '<path d="M12 1C8.1 1 5 4.1 5 8C5 13.3 12 23 12 23S19 13.3 19 8C19 4.1 15.9 1 12 1z" fill="#c9a227"/>'
+    + '<circle cx="12" cy="8" r="3" fill="#fff"/>'
     + '</svg>';
 
-  // Jungle scene: viewBox 0 0 480 160, animals larger & centered
-  var JUNGLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" '
-    + 'width="100%" height="152" style="display:block;">'
-    // sky/fill
-    + '<rect x="0" y="0" width="480" height="160" fill="#eef5e6"/>'
-    // ground strip
-    + '<rect x="0" y="112" width="480" height="48" fill="#c8e6b0"/>'
-    // ── left bush cluster ──
-    + '<ellipse cx="30"  cy="118" rx="35" ry="24" fill="#5ca050"/>'
-    + '<ellipse cx="62"  cy="114" rx="28" ry="20" fill="#4a8c3f"/>'
-    + '<ellipse cx="86"  cy="120" rx="22" ry="16" fill="#5ca050"/>'
-    // ── palm tree 1 ──
-    + '<rect x="132" y="52" width="10" height="65" fill="#7a4f28"/>'
-    + '<ellipse cx="137" cy="48" rx="32" ry="14" transform="rotate(-26 137 48)" fill="#4a8c3f"/>'
-    + '<ellipse cx="137" cy="43" rx="28" ry="12" transform="rotate(18 137 43)"  fill="#5ca050"/>'
-    + '<ellipse cx="137" cy="38" rx="24" ry="11" transform="rotate(-6 137 38)"  fill="#3d7535"/>'
-    + '<circle cx="140" cy="54" r="5.5" fill="#7a4f28"/>'
+  // ── Jungle scene (large, detailed) ────────────────────────────────────────
+  var JUNGLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 145" '
+    + 'width="100%" height="136" style="display:block;">'
+
+    // sky background
+    + '<rect x="0" y="0" width="520" height="145" fill="#f5f8e8"/>'
+
+    // clouds (pink-peach)
+    + '<ellipse cx="80"  cy="30" rx="30" ry="15" fill="#f5d0c0" opacity="0.7"/>'
+    + '<ellipse cx="108" cy="26" rx="22" ry="12" fill="#f5d0c0" opacity="0.7"/>'
+    + '<ellipse cx="60"  cy="28" rx="20" ry="11" fill="#f5d0c0" opacity="0.7"/>'
+    + '<ellipse cx="290" cy="24" rx="25" ry="13" fill="#f5d0c0" opacity="0.6"/>'
+    + '<ellipse cx="315" cy="20" rx="18" ry="10" fill="#f5d0c0" opacity="0.6"/>'
+
+    // sun
+    + '<circle cx="420" cy="32" r="22" fill="#f5c830"/>'
+    + '<circle cx="420" cy="32" r="18" fill="#f8d84a"/>'
+
+    // ground
+    + '<rect x="0" y="106" width="520" height="39" fill="#c0df98"/>'
+
+    // ── left palm tree ──
+    + '<rect x="56" y="38" width="10" height="72" fill="#7a4f28"/>'
+    // left palm fronds
+    + '<ellipse cx="61" cy="34" rx="32" ry="13" transform="rotate(-30 61 34)" fill="#3d8a30"/>'
+    + '<ellipse cx="61" cy="30" rx="28" ry="11" transform="rotate(20 61 30)"  fill="#4a9a3a"/>'
+    + '<ellipse cx="61" cy="27" rx="26" ry="10" transform="rotate(-8 61 27)"  fill="#2d7025"/>'
+    + '<ellipse cx="61" cy="24" rx="22" ry="9"  transform="rotate(35 61 24)"  fill="#3d8a30"/>'
+    + '<circle cx="63" cy="39" r="5" fill="#7a4f28"/>'
+    // coconuts
+    + '<circle cx="72" cy="42" r="4" fill="#5c3a18"/>'
+
+    // ── left bushes ──
+    + '<ellipse cx="20"  cy="112" rx="25" ry="18" fill="#4a9a3a"/>'
+    + '<ellipse cx="42"  cy="109" rx="20" ry="15" fill="#3d8a30"/>'
+
     // ── elephant ──
-    + '<ellipse cx="218" cy="100" rx="38" ry="26" fill="#909090"/>'
-    + '<ellipse cx="198" cy="82"  rx="20" ry="17" fill="#909090"/>'
-    + '<path d="M187 90 Q175 106 180 116 Q183 121 188 116 Q185 105 197 94" fill="#909090"/>'
-    + '<ellipse cx="196" cy="79" rx="13" ry="8" transform="rotate(-12 196 79)" fill="#adadad"/>'
-    + '<circle cx="203" cy="79" r="2.5" fill="#333"/>'
-    + '<rect x="198" y="120" width="8" height="14" rx="2" fill="#7a7a7a"/>'
-    + '<rect x="212" y="120" width="8" height="14" rx="2" fill="#7a7a7a"/>'
-    + '<rect x="226" y="120" width="8" height="14" rx="2" fill="#7a7a7a"/>'
-    // ── palm tree 2 ──
-    + '<rect x="290" y="42" width="11" height="75" fill="#7a4f28"/>'
-    + '<ellipse cx="295" cy="38" rx="34" ry="15" transform="rotate(-22 295 38)" fill="#4a8c3f"/>'
-    + '<ellipse cx="295" cy="33" rx="30" ry="13" transform="rotate(20 295 33)"  fill="#5ca050"/>'
-    + '<ellipse cx="295" cy="28" rx="26" ry="12" transform="rotate(-8 295 28)"  fill="#3d7535"/>'
-    + '<circle cx="295" cy="44" r="5.5" fill="#7a4f28"/>'
-    // ── monkey on palm 2 ──
-    + '<ellipse cx="304" cy="68" rx="9" ry="11" fill="#7a4f28"/>'
-    + '<circle cx="304" cy="56" r="8.5" fill="#7a4f28"/>'
-    + '<circle cx="302" cy="54" r="2.2" fill="#222"/>'
-    + '<ellipse cx="304" cy="60" rx="4.5" ry="3.2" fill="#c4956a"/>'
-    + '<path d="M313 61 Q325 55 330 68" stroke="#7a4f28" stroke-width="3" fill="none"/>'
+    + '<ellipse cx="185" cy="98"  rx="42" ry="28" fill="#8c8c8c"/>'   // body
+    + '<ellipse cx="165" cy="82"  rx="22" ry="18" fill="#8c8c8c"/>'   // head
+    + '<path d="M153 90 Q140 104 144 115 Q147 120 153 115 Q150 104 162 95" fill="#8c8c8c"/>'  // trunk
+    + '<ellipse cx="162" cy="79"  rx="14" ry="9" transform="rotate(-15 162 79)" fill="#aaa"/>'  // ear
+    + '<circle  cx="168" cy="80"  r="2.8" fill="#333"/>'  // eye
+    // elephant tusks
+    + '<path d="M155 92 Q148 98 152 104 Q155 106 158 102 Q156 97 160 92" fill="#f0e8d0" opacity="0.9"/>'
+    // legs
+    + '<rect x="163" y="120" width="9" height="18" rx="3" fill="#7a7a7a"/>'
+    + '<rect x="177" y="120" width="9" height="18" rx="3" fill="#7a7a7a"/>'
+    + '<rect x="191" y="120" width="9" height="18" rx="3" fill="#7a7a7a"/>'
+    + '<rect x="205" y="120" width="9" height="18" rx="3" fill="#7a7a7a"/>'
+    // tail
+    + '<path d="M227 98 Q238 92 236 100 Q234 106 228 105" stroke="#7a7a7a" stroke-width="2.5" fill="none"/>'
+
     // ── giraffe ──
-    + '<rect x="372" y="28" width="14" height="72" fill="#e8a030"/>'
-    + '<ellipse cx="379" cy="26" rx="11" ry="9"  fill="#e8a030"/>'
-    + '<ellipse cx="395" cy="98" rx="22" ry="17" fill="#e8a030"/>'
-    + '<circle cx="375" cy="22" r="2.5" fill="#333"/>'
-    + '<line x1="377" y1="17" x2="377" y2="12" stroke="#c8881a" stroke-width="3"/>'
-    + '<rect x="387" y="112" width="6" height="22" rx="2" fill="#c8881a"/>'
-    + '<rect x="400" y="112" width="6" height="22" rx="2" fill="#c8881a"/>'
-    + '<ellipse cx="377" cy="46" rx="4"   ry="5"   fill="#c8881a"/>'
-    + '<ellipse cx="374" cy="62" rx="3.5" ry="4.5" fill="#c8881a"/>'
-    + '<ellipse cx="384" cy="56" rx="3.5" ry="4.5" fill="#c8881a"/>'
-    // ── right bush cluster ──
-    + '<ellipse cx="450" cy="118" rx="32" ry="22" fill="#5ca050"/>'
-    + '<ellipse cx="474" cy="115" rx="25" ry="18" fill="#4a8c3f"/>'
-    // ── sun ──
-    + '<circle cx="452" cy="38" rx="22" ry="22" fill="#f5c830"/>'
+    + '<rect x="305" y="28"  width="14" height="78" fill="#e8a030"/>'   // neck
+    + '<ellipse cx="312" cy="26" rx="11" ry="9"    fill="#e8a030"/>'    // head
+    + '<ellipse cx="330" cy="100" rx="24" ry="18"  fill="#e8a030"/>'    // body
+    + '<circle  cx="308" cy="22"  r="2.5"           fill="#333"/>'      // eye
+    + '<line x1="310" y1="17" x2="310" y2="12"     stroke="#e8a030" stroke-width="3.5"/>'  // ossicone
+    + '<line x1="316" y1="16" x2="317" y2="11"     stroke="#e8a030" stroke-width="3"/>'    // ossicone 2
+    // giraffe spots
+    + '<ellipse cx="311" cy="42"  rx="4"   ry="5.5" fill="#c8781a"/>'
+    + '<ellipse cx="308" cy="58"  rx="3.5" ry="4.5" fill="#c8781a"/>'
+    + '<ellipse cx="315" cy="52"  rx="3.5" ry="4.5" fill="#c8781a"/>'
+    + '<ellipse cx="310" cy="72"  rx="4"   ry="5"   fill="#c8781a"/>'
+    // giraffe legs
+    + '<rect x="316" y="115" width="7" height="25" rx="2" fill="#c8781a"/>'
+    + '<rect x="328" y="115" width="7" height="25" rx="2" fill="#c8781a"/>'
+    + '<rect x="340" y="115" width="7" height="25" rx="2" fill="#c8781a"/>'
+    // tail
+    + '<path d="M353 105 Q362 100 360 108 Q358 114 352 112" stroke="#c8781a" stroke-width="2.5" fill="none"/>'
+
+    // ── right palm tree ──
+    + '<rect x="388" y="42" width="11" height="68" fill="#7a4f28"/>'
+    + '<ellipse cx="393" cy="38" rx="32" ry="13" transform="rotate(-25 393 38)" fill="#3d8a30"/>'
+    + '<ellipse cx="393" cy="34" rx="28" ry="12" transform="rotate(22 393 34)"  fill="#4a9a3a"/>'
+    + '<ellipse cx="393" cy="30" rx="25" ry="10" transform="rotate(-6 393 30)"  fill="#2d7025"/>'
+    + '<circle cx="393" cy="43" r="5.5" fill="#7a4f28"/>'
+
+    // ── monkey on right palm ──
+    + '<ellipse cx="402" cy="62" rx="9"  ry="11" fill="#8b5a2b"/>'
+    + '<circle  cx="402" cy="51" r="8.5"          fill="#8b5a2b"/>'
+    + '<ellipse cx="8"   cy="6"  rx="5"  ry="3"   fill="#c49060" transform="translate(394 48)"/>'
+    + '<circle  cx="399" cy="50" r="2"             fill="#222"/>'
+    + '<path d="M411 56 Q420 50 422 60" stroke="#8b5a2b" stroke-width="3" fill="none"/>'
+    + '<path d="M393 58 Q383 54 383 64" stroke="#8b5a2b" stroke-width="3" fill="none"/>'
+
+    // ── right bushes ──
+    + '<ellipse cx="464" cy="112" rx="28" ry="20" fill="#4a9a3a"/>'
+    + '<ellipse cx="492" cy="109" rx="24" ry="17" fill="#3d8a30"/>'
+    + '<ellipse cx="514" cy="113" rx="20" ry="15" fill="#4a9a3a"/>'
+
+    // ── compass (bottom right) ──
+    + '<circle cx="488" cy="100" r="20" fill="#c9a227" opacity="0.9"/>'
+    + '<circle cx="488" cy="100" r="16" fill="#d4b84a"/>'
+    + '<circle cx="488" cy="100" r="14" fill="#e8d070"/>'
+    + '<polygon points="488,86 491,100 488,100" fill="#c0392b"/>'
+    + '<polygon points="488,100 491,100 488,114" fill="#7a7a7a"/>'
+    + '<polygon points="474,100 488,97 488,100" fill="#7a7a7a"/>'
+    + '<polygon points="488,100 488,97 502,100" fill="#c0392b"/>'
+    + '<circle cx="488" cy="100" r="3" fill="#555"/>'
+    + '<text x="488" y="90.5" text-anchor="middle" font-size="5" fill="#555" font-family="Arial">N</text>'
+    + '<text x="488" y="113" text-anchor="middle" font-size="5" fill="#555" font-family="Arial">S</text>'
+    + '<text x="477.5" y="102" text-anchor="middle" font-size="5" fill="#555" font-family="Arial">W</text>'
+    + '<text x="499.5" y="102" text-anchor="middle" font-size="5" fill="#555" font-family="Arial">E</text>'
+
     + '</svg>';
 
   return '<!DOCTYPE html><html><head><meta charset="UTF-8">'
     + '<style>'
     + '* { print-color-adjust:exact; -webkit-print-color-adjust:exact; margin:0; padding:0; box-sizing:border-box; }'
-    + '@page { size:210mm 118mm; margin:0; }'
-    + 'html,body { width:210mm; height:118mm; overflow:hidden; font-family:Arial,Helvetica,sans-serif; }'
+    + '@page { size:210mm 110mm; margin:0; }'
+    + 'html,body { width:210mm; height:110mm; overflow:hidden; font-family:Arial,Helvetica,sans-serif; }'
     + 'table { border-collapse:collapse; }'
     + '</style></head><body>'
-    + '<table style="width:210mm;height:118mm;" cellpadding="0" cellspacing="0">'
+    + '<table style="width:210mm;height:110mm;" cellpadding="0" cellspacing="0">'
     + '<tr>'
 
-    // ── LEFT STUB ─────────────────────────────────────────────────────────────
-    + '<td style="width:62mm;background:#1a5c38;vertical-align:top;position:relative;overflow:hidden;'
+    // ══ LEFT STUB ════════════════════════════════════════════════════════════
+    + '<td style="width:62mm;background:#1c5e30;vertical-align:top;position:relative;overflow:hidden;'
     + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
     + STUB_BG
-    + '<table width="100%" cellpadding="0" cellspacing="0" style="position:relative;z-index:1;">'
+    + STUB_LEAVES_TL
+    + STUB_LEAVES_BL
+    + STUB_VINE_R
 
-    // logo badge — 80px circle
-    + '<tr><td style="text-align:center;padding:14px 0 6px;">'
-    + '<div style="width:72px;height:72px;border-radius:50%;background:#fff;border:2.5px solid #c9a227;'
+    + '<table width="100%" cellpadding="0" cellspacing="0" style="position:relative;z-index:4;">'
+
+    // logo badge
+    + '<tr><td style="text-align:center;padding:16px 0 6px;">'
+    + '<div style="width:74px;height:74px;border-radius:50%;background:#fff;border:2.5px solid #c9a227;'
     + 'margin:0 auto;overflow:hidden;text-align:center;line-height:0;">'
-    + '<img src="' + LOGO_SRC + '" width="67" height="67" style="border-radius:50%;" />'
+    + '<img src="' + LOGO_SRC + '" width="69" height="69" style="border-radius:50%;" />'
     + '</div>'
     + '</td></tr>'
 
     // ADMISSION PASS pill
-    + '<tr><td style="text-align:center;padding:2px 12px 8px;">'
-    + '<div style="background:#155230;border:1px solid #c9a227;border-radius:3px;padding:4px 0;'
+    + '<tr><td style="text-align:center;padding:3px 14px 8px;">'
+    + '<div style="background:#1a5228;border:1.5px solid #c9a227;border-radius:3px;padding:4px 0;'
     + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
-    + '<span style="font-size:7.5px;font-weight:bold;color:#c9a227;letter-spacing:2.5px;">ADMISSION PASS</span>'
+    + '<span style="font-size:8px;font-weight:bold;color:#c9a227;letter-spacing:2.5px;">ADMISSION PASS</span>'
     + '</div>'
     + '</td></tr>'
 
     // child name
-    + '<tr><td style="text-align:center;padding:6px 10px 2px;">'
-    + '<div style="font-size:20px;font-weight:900;color:#fff;line-height:1.1;'
-    + 'text-transform:uppercase;word-break:break-word;">' + childName + '</div>'
+    + '<tr><td style="text-align:center;padding:6px 12px 2px;">'
+    + '<div style="font-size:22px;font-weight:900;color:#fff;line-height:1.1;text-transform:uppercase;word-break:break-word;">'
+    + childName + '</div>'
     + '</td></tr>'
 
     // age
     + '<tr><td style="text-align:center;padding:3px 8px 0;">'
-    + '<span style="font-size:12px;color:#c9a227;font-weight:bold;">Age: ' + childAge + '</span>'
+    + '<span style="font-size:12px;color:#e0e0e0;">Age: ' + childAge + '</span>'
     + '</td></tr>'
 
     // ref code
-    + '<tr><td style="text-align:center;padding:12px 8px 14px;">'
-    + '<div style="font-size:8px;color:#a8c8b8;line-height:1.8;">'
+    + '<tr><td style="text-align:center;padding:10px 8px 14px;">'
+    + '<div style="font-size:8.5px;color:#b0cfc0;line-height:1.9;">'
     + 'Unique ID &amp;<br>'
-    + 'Ref Code: <strong style="color:#f0d050;font-size:8.5px;">' + submissionId + '</strong>'
+    + 'Ref Code: <strong style="color:#f0d050;font-size:9px;">' + submissionId + '</strong>'
     + '</div>'
     + '</td></tr>'
 
     + '</table>'
     + '</td>'
 
-    // ── RIGHT BODY ────────────────────────────────────────────────────────────
-    + '<td style="background:#eef5e6;vertical-align:top;position:relative;overflow:hidden;'
+    // ══ RIGHT BODY ═══════════════════════════════════════════════════════════
+    + '<td style="background:#f6f9ed;vertical-align:top;position:relative;overflow:hidden;'
     + 'print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
-    + LEAF_TL + LEAF_TR
-    // inner table with explicit row heights that sum to ~446px (118mm)
+    + RIGHT_LEAVES_TR
+    + TITLE_DECO_L
+    + TITLE_DECO_R
+
+    // inner table — explicit row heights summing to ~416px (110mm)
     + '<table width="100%" cellpadding="0" cellspacing="0">'
 
-    // row 1: header — 166px
-    + '<tr><td style="height:166px;text-align:center;padding:14px 60px 0;vertical-align:top;position:relative;z-index:1;">'
-    + '<div style="font-size:7.5px;color:#2d5a1b;letter-spacing:3px;font-weight:bold;">EL BETHEL AG INTERNATIONAL CHURCH</div>'
-    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:46px;font-weight:bold;'
-    + 'color:#1a5c38;line-height:0.92;text-transform:uppercase;letter-spacing:3px;margin:4px 0 0;">JUNGLE</div>'
-    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:46px;font-weight:bold;'
-    + 'color:#1a5c38;line-height:0.92;text-transform:uppercase;letter-spacing:3px;margin:0 0 6px;">SAFARI</div>'
-    + '<div style="font-size:9px;color:#2d5a1b;letter-spacing:2px;font-weight:bold;">VACATION BIBLE SCHOOL 2026</div>'
+    // row 1: header — 154px
+    + '<tr><td style="height:154px;text-align:center;padding:12px 52px 0;vertical-align:top;position:relative;z-index:5;">'
+    + '<div style="font-size:7.5px;color:#2d5a1b;letter-spacing:3px;font-weight:bold;margin-bottom:4px;">'
+    + 'EL BETHEL AG INTERNATIONAL CHURCH</div>'
+    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:48px;font-weight:bold;'
+    + 'color:#2d5a1b;line-height:0.92;text-transform:uppercase;letter-spacing:2px;margin:0;">JUNGLE</div>'
+    + '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:48px;font-weight:bold;'
+    + 'color:#2d5a1b;line-height:0.92;text-transform:uppercase;letter-spacing:2px;margin:0 0 6px;">SAFARI</div>'
+    + '<div style="font-size:10px;color:#2d5a1b;letter-spacing:2px;font-weight:bold;">VACATION BIBLE SCHOOL 2026</div>'
     + '</td></tr>'
 
-    // row 2: WHEN / WHERE — 94px
-    + '<tr><td style="height:94px;padding:10px 16px;vertical-align:top;position:relative;z-index:1;">'
+    // row 2: WHEN / WHERE — 82px
+    + '<tr><td style="height:82px;padding:8px 16px 6px;vertical-align:top;position:relative;z-index:5;">'
+    // dashed top divider
+    + '<div style="border-top:1.5px dashed #aac890;margin-bottom:8px;"></div>'
     + '<table width="100%" cellpadding="0" cellspacing="0"><tr>'
-    + '<td style="width:48%;vertical-align:top;padding-right:12px;">'
+    + '<td style="width:48%;vertical-align:top;padding-right:10px;">'
     + '<div style="margin-bottom:4px;">' + CAL
-    + '<span style="font-size:10px;font-weight:bold;color:#2d5a1b;letter-spacing:1px;vertical-align:middle;">WHEN</span></div>'
-    + '<div style="font-size:8.5px;color:#444;line-height:1.6;padding-left:2px;">'
+    + '<span style="font-size:10.5px;font-weight:bold;color:#2d5a1b;letter-spacing:0.5px;vertical-align:middle;">WHEN</span></div>'
+    + '<div style="font-size:8.5px;color:#444;line-height:1.6;padding-left:3px;">'
     + 'Date: <strong>May 11 &ndash; 15, 2026</strong><br>'
     + 'Time: 10:00 AM &ndash; 1:00 PM'
     + '</div>'
     + '</td>'
-    + '<td style="width:52%;vertical-align:top;padding-left:12px;">'
+    // vertical dashed divider
+    + '<td style="width:3px;border-left:1.5px dashed #aac890;"></td>'
+    + '<td style="width:49%;vertical-align:top;padding-left:12px;">'
     + '<div style="margin-bottom:4px;">' + PIN
-    + '<span style="font-size:10px;font-weight:bold;color:#2d5a1b;letter-spacing:1px;vertical-align:middle;">WHERE</span></div>'
-    + '<div style="font-size:8px;color:#444;line-height:1.6;padding-left:2px;">'
+    + '<span style="font-size:10.5px;font-weight:bold;color:#2d5a1b;letter-spacing:0.5px;vertical-align:middle;">WHERE</span></div>'
+    + '<div style="font-size:8px;color:#444;line-height:1.6;padding-left:3px;">'
     + '107, 5th Cross Rd, Chinnapanahalli<br>'
     + 'Main Rd, Marathahalli,<br>'
     + 'Bengaluru 560037'
@@ -464,13 +605,13 @@ function buildPassHtml(childName, childAge, picnicConsent, submissionId) {
     + '</tr></table>'
     + '</td></tr>'
 
-    // row 3: jungle animals — 152px
-    + '<tr><td style="height:152px;padding:0;vertical-align:bottom;">'
+    // row 3: jungle scene — 144px
+    + '<tr><td style="height:144px;padding:0;vertical-align:bottom;position:relative;z-index:5;">'
     + JUNGLE
     + '</td></tr>'
 
-    // row 4: picnic band — 34px
-    + '<tr>' + PICNIC_TD + '</tr>'
+    // row 4: bottom band — 36px
+    + '<tr>' + BAND_TD + '</tr>'
 
     + '</table>'
     + '</td>'

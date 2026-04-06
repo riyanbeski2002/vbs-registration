@@ -244,85 +244,128 @@ function readRegistrationRow(row) {
 
 // ── Phase 2: PDF Pass Generator ───────────────────────────────────────────────
 
+var LOGO_DRIVE_FILE_ID = ''; // Set to the Google Drive file ID of the church logo before deploying
+
+/**
+ * Fetches the church logo from Google Drive and returns it as a base64 data URI.
+ * Returns { ok: true, src: 'data:image/...;base64,...' } on success.
+ * Returns { ok: false, src: '' } if LOGO_DRIVE_FILE_ID is unset or fetch fails.
+ * Safe to call even when no logo is configured — pass renders without logo.
+ */
+function getLogoBase64() {
+  if (!LOGO_DRIVE_FILE_ID) return { ok: false, src: '' };
+  try {
+    var blob = DriveApp.getFileById(LOGO_DRIVE_FILE_ID).getBlob();
+    var encoded = Utilities.base64Encode(blob.getBytes());
+    var mimeType = blob.getContentType() || 'image/png';
+    return { ok: true, src: 'data:' + mimeType + ';base64,' + encoded };
+  } catch (err) {
+    Logger.log('getLogoBase64 failed: ' + err.message);
+    return { ok: false, src: '' };
+  }
+}
+
 /**
  * Builds the HTML string for a single child's VBS pass.
- * Every piece of data is its own element — no text burned onto an image.
+ * Produces a landscape A5 event-ticket layout using an HTML table (two columns):
+ *   - Left stub: jungle green background, child name, age, admission label, optional logo, SVG leaf accent
+ *   - Right body: church name, event title, dates, address, submission ID, picnic band
+ * The picnic band is ALWAYS rendered — gold/active when consent="Yes", greyed/strikethrough when "No".
+ * print-color-adjust: exact is applied globally and inline on all colored elements so the green
+ * stub and gold band survive the GAS WebKit PDF renderer's background-stripping behavior.
  */
-function buildPassHtml(childName, childAge, picnicConsent) {
-  var picnicSection = picnicConsent === 'Yes'
-    ? '<div style="margin-top:20px;border:2px solid #c8a84b;border-radius:8px;padding:14px 18px;background:#fffbea;">'
-      + '<div style="font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#92610a;margin-bottom:4px;">Day 5 — Full Day Picnic Pass</div>'
-      + '<div style="font-size:13px;color:#78350f;font-weight:600;">May 15, 2026 &nbsp;·&nbsp; All Day</div>'
-      + '<div style="font-size:11px;color:#a16207;margin-top:4px;">This pass admits the child to the Day 5 picnic event.</div>'
-      + '</div>'
+function buildPassHtml(childName, childAge, picnicConsent, submissionId, logo) {
+  var picnicActive = (picnicConsent === 'Yes');
+  var picnicStyle = picnicActive
+    ? 'background:#c9a227;color:#1a1a1a;font-weight:700;print-color-adjust:exact;-webkit-print-color-adjust:exact;'
+    : 'background:#cccccc;color:#888888;opacity:0.45;text-decoration:line-through;print-color-adjust:exact;-webkit-print-color-adjust:exact;';
+
+  var logoHtml = logo.ok
+    ? '<img src="' + logo.src + '" style="height:40px;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;" />'
     : '';
 
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;font-family:Georgia,serif;background:#f5f5f5;">'
-    + '<div style="width:520px;margin:30px auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,0.12);">'
+  // Inline SVG leaf silhouette — decorative jungle accent at low opacity
+  // Uses a real HTML element (not ::before/::after) for WebKit PDF compatibility
+  var leafSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" '
+    + 'style="opacity:0.18;display:block;margin:0 auto 6px auto;" fill="#ffffff">'
+    + '<path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c7 0 '
+    + '12-8 12-8a22.29 22.29 0 0 1-3 5.4C15.59 19 14 21 12 21a3.38 3.38 0 0 1-1.53-.36'
+    + 'C9.27 22.23 8.31 23 7 23a3 3 0 0 1-3-3c0-1 .46-1.87 1.17-2.51C5.06 17.16 5 16.59 '
+    + '5 16c0-5.52 6-10 12-10z"/>'
+    + '</svg>';
 
-    // ── Header ──
-    + '<div style="background:#0f2d1a;padding:20px 24px;">'
-    + '<div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a3d9b1;margin-bottom:4px;">El Bethel AG International Church</div>'
-    + '<div style="font-size:20px;font-weight:700;color:#c8a84b;letter-spacing:0.06em;">Jungle Safari VBS 2026</div>'
+  return '<!DOCTYPE html>'
+    + '<html><head><meta charset="UTF-8">'
+    + '<style>'
+    + '* { box-sizing: border-box; print-color-adjust: exact; -webkit-print-color-adjust: exact; }'
+    + '@page { size: A5 landscape; margin: 8mm; }'
+    + 'body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background: #ffffff; }'
+    + '</style>'
+    + '</head><body>'
+
+    // ── Two-column ticket table (no flexbox — WebKit PDF safe) ──
+    + '<table width="100%" style="border-collapse:collapse;height:100%;">'
+    + '<tr>'
+
+    // ── Left stub: jungle green ──
+    + '<td width="28%" style="background:#1a5c38;color:#ffffff;vertical-align:middle;text-align:center;'
+    + 'padding:16px 10px;print-color-adjust:exact;-webkit-print-color-adjust:exact;">'
+    + logoHtml
+    + leafSvg
+    + '<div style="font-size:22px;font-weight:700;line-height:1.2;margin-bottom:6px;">' + childName + '</div>'
+    + '<div style="font-size:13px;font-weight:600;color:#a3d9b1;">Age: ' + childAge + ' yrs</div>'
+    + '<div style="margin-top:14px;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:#5a9c76;">Admission Pass</div>'
+    + '</td>'
+
+    // ── Right body: white ──
+    + '<td width="72%" style="background:#ffffff;vertical-align:top;padding:16px 18px;">'
+    + '<div style="font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#1a5c38;margin-bottom:2px;">El Bethel AG International Church</div>'
+    + '<div style="font-size:18px;font-weight:700;color:#c9a227;margin-bottom:10px;">Vacation Bible School 2026</div>'
+    + '<div style="font-size:12px;font-weight:700;color:#1a5c38;margin-bottom:2px;">May 11 - 15, 2026</div>'
+    + '<div style="font-size:11px;color:#374151;margin-bottom:8px;">Monday to Friday &nbsp;&middot;&nbsp; 10:00 AM - 1:00 PM</div>'
+    + '<div style="font-size:10px;color:#6b7280;margin-bottom:10px;">107, 5th Cross Rd, Chinnapanahalli Main Rd,<br>Doddanekundi, Marathahalli, Bengaluru 560037</div>'
+    + '<div style="font-size:10px;color:#9ca3af;">Ref: ' + submissionId + '</div>'
+
+    // ── Picnic band — always rendered, style differs by consent ──
+    + '<div style="margin-top:12px;padding:6px 12px;text-align:center;font-size:11px;'
+    + 'letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;' + picnicStyle + '">'
+    + 'Day 5 - Full Day Picnic'
     + '</div>'
 
-    // ── Admission label ──
-    + '<div style="background:#2d7a4f;padding:8px 24px;">'
-    + '<div style="font-size:10px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:#d4f7e2;">Admission Pass</div>'
-    + '</div>'
-
-    // ── Child details ──
-    + '<div style="padding:22px 24px 0;">'
-    + '<div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;margin-bottom:6px;">Child</div>'
-    + '<div style="font-size:24px;font-weight:700;color:#0f2d1a;margin-bottom:2px;">' + childName + '</div>'
-    + '<div style="font-size:14px;color:#374151;font-weight:600;">Age: ' + childAge + ' years</div>'
-    + '</div>'
-
-    // ── Divider ──
-    + '<div style="margin:18px 24px;border-top:1.5px solid #e5e7eb;"></div>'
-
-    // ── Event details ──
-    + '<div style="padding:0 24px;">'
-    + '<div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">Event Details</div>'
-    + '<div style="font-size:14px;color:#111827;font-weight:600;margin-bottom:4px;">May 11 – 15, 2026</div>'
-    + '<div style="font-size:13px;color:#374151;margin-bottom:4px;">Monday to Friday &nbsp;·&nbsp; 10:00 AM – 1:00 PM</div>'
-    + '<div style="font-size:12px;color:#6b7280;margin-top:8px;">' + CHURCH_ADDRESS + '</div>'
-    + '</div>'
-
-    // ── Picnic section (conditional) ──
-    + '<div style="padding:0 24px 24px;">'
-    + picnicSection
-    + '</div>'
-
-    // ── Footer ──
-    + '<div style="background:#f9fafb;border-top:1px solid #e5e7eb;padding:12px 24px;text-align:center;">'
-    + '<div style="font-size:10px;color:#9ca3af;">We look forward to seeing you! &nbsp;·&nbsp; vbs-chi.vercel.app</div>'
-    + '</div>'
-
-    + '</div></body></html>';
+    + '</td>'
+    + '</tr>'
+    + '</table>'
+    + '</body></html>';
 }
 
 /**
  * Generates a PDF blob for one child's pass.
  * Creates a temporary HTML file in Drive, exports it as PDF, then trashes the temp file.
+ * The finally block guarantees temp file cleanup even if getAs() throws an exception.
  */
-function generatePassPdf(childName, childAge, picnicConsent) {
-  var html = buildPassHtml(childName, childAge, picnicConsent);
+function generatePassPdf(childName, childAge, picnicConsent, submissionId, logo) {
+  var html = buildPassHtml(childName, childAge, picnicConsent, submissionId, logo);
   var tempFile = DriveApp.createFile(
     Utilities.newBlob(html, 'text/html', childName + '-pass.html')
   );
-  var pdfBlob = tempFile.getAs('application/pdf').setName(childName + ' - VBS Pass 2026.pdf');
-  tempFile.setTrashed(true);
+  var pdfBlob;
+  try {
+    pdfBlob = tempFile.getAs('application/pdf').setName(childName + ' - VBS Pass 2026.pdf');
+  } finally {
+    tempFile.setTrashed(true);
+  }
   return pdfBlob;
 }
 
 /**
  * Generates PDF passes for all children in a registration.
+ * Fetches the church logo ONCE (one Drive read) then passes it to each child's PDF generation.
  * Returns an array of PDF blobs ready to attach to an email.
  */
 function generatePassesForRegistration(data) {
+  var logo = getLogoBase64();
   return data.kids.map(function(kid) {
-    return generatePassPdf(kid.name, kid.age, data.picnicConsent);
+    return generatePassPdf(kid.name, kid.age, data.picnicConsent, data.submissionId, logo);
   });
 }
 

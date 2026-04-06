@@ -42,7 +42,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md — Rewrite PDF pass generator: landscape A5 ticket layout, jungle green + gold branding, always-present picnic band, logo via base64
+- [x] 02-01-PLAN.md — Rewrite PDF pass generator: landscape A5 ticket layout, jungle green + gold branding, always-present picnic band, logo via base64 (Tasks 1+2 complete; Task 3 visual checkpoint pending)
 
 ### Phase 3: Email Delivery + Guard
 **Goal**: The parent receives exactly one branded email with all children's passes attached, and re-approving a sent row does nothing
@@ -63,7 +63,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Trigger | 1/1 | Complete   | 2026-03-30 |
-| 2. PDF Pass Generator | 0/1 | Not started | - |
+| 2. PDF Pass Generator | 1/1 | In progress (visual checkpoint pending) | - |
 | 3. Email Delivery + Guard | 0/TBD | Not started | - |
 
 ### Phase 4: Redesign PDF pass and email template — fix age bug, polish layout, remove vercel URL, improve email formatting

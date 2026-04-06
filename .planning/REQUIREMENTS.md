@@ -13,14 +13,14 @@
 
 ### PDF Pass
 
-- [ ] **PASS-01**: A PDF pass is generated for each child in the registration
-- [ ] **PASS-02**: Each pass displays the child's name and age
-- [ ] **PASS-03**: Each pass displays VBS dates: May 11–15, 2026 | 10:00 AM – 1:00 PM
-- [ ] **PASS-04**: Each pass displays church name: El Bethel AG International Church
-- [ ] **PASS-05**: Each pass displays the church address
-- [ ] **PASS-06**: Each pass includes a "Day 5 — Full Day Picnic" section
-- [ ] **PASS-07**: Picnic pass section is visually distinct / highlighted only when Picnic Consent (col 16) = "Yes"
-- [ ] **PASS-08**: Each pass is themed to match the Jungle Safari VBS branding (green palette, safari style)
+- [x] **PASS-01**: A PDF pass is generated for each child in the registration
+- [x] **PASS-02**: Each pass displays the child's name and age
+- [x] **PASS-03**: Each pass displays VBS dates: May 11–15, 2026 | 10:00 AM – 1:00 PM
+- [x] **PASS-04**: Each pass displays church name: El Bethel AG International Church
+- [x] **PASS-05**: Each pass displays the church address
+- [x] **PASS-06**: Each pass includes a "Day 5 — Full Day Picnic" section
+- [x] **PASS-07**: Picnic pass section is visually distinct / highlighted only when Picnic Consent (col 16) = "Yes"
+- [x] **PASS-08**: Each pass is themed to match the Jungle Safari VBS branding (green palette, safari style)
 
 ### Email
 
@@ -63,14 +63,14 @@
 | TRIG-01 | Phase 1 | Complete |
 | TRIG-02 | Phase 1 | Complete |
 | TRIG-03 | Phase 1 | Complete |
-| PASS-01 | Phase 2 | Pending |
-| PASS-02 | Phase 2 | Pending |
-| PASS-03 | Phase 2 | Pending |
-| PASS-04 | Phase 2 | Pending |
-| PASS-05 | Phase 2 | Pending |
-| PASS-06 | Phase 2 | Pending |
-| PASS-07 | Phase 2 | Pending |
-| PASS-08 | Phase 2 | Pending |
+| PASS-01 | Phase 2 | Complete (02-01) |
+| PASS-02 | Phase 2 | Complete (02-01) |
+| PASS-03 | Phase 2 | Complete (02-01) |
+| PASS-04 | Phase 2 | Complete (02-01) |
+| PASS-05 | Phase 2 | Complete (02-01) |
+| PASS-06 | Phase 2 | Complete (02-01) |
+| PASS-07 | Phase 2 | Complete (02-01) |
+| PASS-08 | Phase 2 | Complete (02-01) |
 | EMAIL-01 | Phase 3 | Pending |
 | EMAIL-02 | Phase 3 | Pending |
 | EMAIL-03 | Phase 3 | Pending |

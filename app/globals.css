@@ -1,0 +1,648 @@
+@import "tailwindcss";
+
+@theme {
+  /* Deep rainforest + gold expedition palette */
+  --color-jungle-deep:    #0a1e10;
+  --color-jungle-mid:     #1a5c34;
+  --color-jungle-light:   #2e8a52;
+  --color-jungle-bright:  #4db874;
+  --color-jungle-accent:  #c8a84b;
+  --color-jungle-amber:   #e8a820;
+  --color-jungle-bark:    #6b3f16;
+  --color-jungle-sand:    #ede3c4;
+  --color-jungle-parch:   #f5eed8;
+  --color-jungle-cream:   #faf6ec;
+  --color-jungle-sun:     #d4921f;
+  --color-jungle-rust:    #b85c20;
+  --color-safari-khaki:   #b8a46e;
+
+  --font-display: 'Fredoka', cursive;
+  --font-body:    'Nunito', sans-serif;
+}
+
+/* ── Scroll CSS variable (set by ForestBackground.tsx) ─────── */
+:root {
+  --scroll: 0px;
+}
+
+/* ── Base: transparent so forest fixed bg shows through ─────── */
+html {
+  background: #000d02;  /* dark fallback while JS loads */
+}
+body {
+  font-family: var(--font-body);
+  background: transparent;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── Leaf animations ─────────────────────────────────────────── */
+@keyframes leaf-sway {
+  0%, 100% { transform: rotate(-7deg); }
+  50%       { transform: rotate(7deg); }
+}
+@keyframes leaf-sway-alt {
+  0%, 100% { transform: rotate(6deg) scaleX(-1); }
+  50%       { transform: rotate(-6deg) scaleX(-1); }
+}
+.leaf-animate     { animation: leaf-sway 4s ease-in-out infinite; transform-origin: bottom center; }
+.leaf-animate-alt { animation: leaf-sway-alt 3.6s ease-in-out infinite 0.7s; transform-origin: bottom center; }
+
+/* ── Firefly animation ───────────────────────────────────────── */
+@keyframes firefly-float {
+  0%   { opacity: 0;    transform: scale(0.5) translateY(0); }
+  20%  { opacity: 0.92; transform: scale(1) translateY(-7px); }
+  50%  { opacity: 0.6;  transform: scale(0.88) translateY(-16px) translateX(6px); }
+  80%  { opacity: 0.9;  transform: scale(1.12) translateY(-7px) translateX(-5px); }
+  100% { opacity: 0;    transform: scale(0.5) translateY(0); }
+}
+
+/* ── Rain animation ──────────────────────────────────────────── */
+@keyframes rain-fall {
+  0%   { transform: translateY(-30px); opacity: 0; }
+  4%   { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateY(105vh);  opacity: 0; }
+}
+
+/* ── Mist drift ──────────────────────────────────────────────── */
+@keyframes mist-drift {
+  from { transform: translateX(-4%) scaleX(0.96); opacity: 0.7; }
+  to   { transform: translateX(4%)  scaleX(1.04); opacity: 1;   }
+}
+
+/* ── Badge float ─────────────────────────────────────────────── */
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ── Scroll-cue bounce ───────────────────────────────────────── */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.38; }
+  50%       { transform: translateY(5px); opacity: 0.55; }
+}
+
+/* ── Pulse glow for submit button ────────────────────────────── */
+@keyframes pulse-jungle {
+  0%, 100% { box-shadow: 0 4px 16px rgba(15,45,26,0.4),  inset 0 1px 0 rgba(255,255,255,0.1); }
+  50%       { box-shadow: 0 4px 36px rgba(15,45,26,0.65), 0 0 28px rgba(30,107,60,0.4), inset 0 1px 0 rgba(255,255,255,0.1); }
+}
+
+/* ── Gold shimmer ────────────────────────────────────────────── */
+@keyframes shimmer-gold {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.68; }
+}
+
+/* ── Glass card section reveals ─────────────────────────────── */
+@keyframes glass-reveal {
+  from { opacity: 0; transform: translateY(22px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.glass-reveal {
+  animation: glass-reveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.glass-reveal:nth-child(2) { animation-delay: 0.08s; }
+.glass-reveal:nth-child(3) { animation-delay: 0.16s; }
+.glass-reveal:nth-child(4) { animation-delay: 0.24s; }
+.glass-reveal:nth-child(5) { animation-delay: 0.32s; }
+
+/* ── LIQUID GLASS CARDS ──────────────────────────────────────── */
+/*
+   The glass effect works because:
+   1. body background is transparent
+   2. ForestBackground is position:fixed behind everything
+   3. backdrop-filter blurs the forest behind each card
+   4. radial-gradient water droplet highlights create the glass texture
+*/
+.jungle-card {
+  /* Water droplet specular highlights + warm glass base */
+  background:
+    radial-gradient(circle at 7%  10%, rgba(255,255,255,0.52) 0%, rgba(255,255,255,0) 17%),
+    radial-gradient(circle at 88% 6%,  rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 15%),
+    radial-gradient(circle at 44% 92%, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0) 18%),
+    radial-gradient(circle at 93% 70%, rgba(255,255,255,0.40) 0%, rgba(255,255,255,0) 14%),
+    radial-gradient(circle at 20% 56%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 12%),
+    radial-gradient(circle at 65% 38%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 10%),
+    rgba(238, 252, 242, 0.76);
+  backdrop-filter: blur(20px) saturate(155%) brightness(1.04);
+  -webkit-backdrop-filter: blur(20px) saturate(155%) brightness(1.04);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-top: 1px solid rgba(255, 255, 255, 0.82);
+  border-left: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 28px 72px rgba(0, 18, 4, 0.52),
+    0 8px 24px rgba(0, 12, 3, 0.3),
+    0 0 40px rgba(80, 200, 120, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(0, 30, 8, 0.08),
+    inset 2px 2px 2px 0 rgba(255, 255, 255, 0.15),
+    inset -2px -2px 2px 0 rgba(255, 255, 255, 0.06);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+}
+.jungle-card:hover {
+  box-shadow:
+    0 32px 80px rgba(0, 18, 4, 0.58),
+    0 10px 28px rgba(0, 12, 3, 0.35),
+    0 0 50px rgba(80, 200, 120, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 30, 8, 0.1),
+    inset 2px 2px 2px 0 rgba(255, 255, 255, 0.20),
+    inset -2px -2px 2px 0 rgba(255, 255, 255, 0.08);
+}
+/* Green left-edge accent bar */
+.jungle-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(to bottom, rgba(60,180,100,0.55) 0%, rgba(60,180,100,0.18) 65%, transparent 100%);
+  border-radius: 1rem 0 0 1rem;
+}
+
+/* ── Child sub-card (glass, slightly less opaque) ────────────── */
+.kid-card {
+  background:
+    radial-gradient(circle at 6%  8%,  rgba(255,255,255,0.48) 0%, rgba(255,255,255,0) 15%),
+    radial-gradient(circle at 90% 7%,  rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 14%),
+    radial-gradient(circle at 48% 90%, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0) 16%),
+    radial-gradient(circle at 80% 65%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 12%),
+    rgba(238, 252, 244, 0.70);
+  backdrop-filter: blur(14px) saturate(145%);
+  -webkit-backdrop-filter: blur(14px) saturate(145%);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-top: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 14px 42px rgba(0, 15, 4, 0.38),
+    0 4px 12px rgba(0, 10, 3, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.kid-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(to bottom, rgba(48,168,96,0.6), rgba(48,168,96,0.18) 75%, transparent);
+  border-radius: 0.75rem 0 0 0.75rem;
+}
+
+/* ── Inputs (glass-compatible) ───────────────────────────────── */
+.jungle-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid rgba(160, 200, 170, 0.55);
+  border-radius: 0.625rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  background: rgba(255, 255, 255, 0.72);
+  color: #1a1a1a;
+}
+.jungle-input:focus {
+  border-color: #1a5c34;
+  box-shadow: 0 0 0 3px rgba(26, 92, 52, 0.18);
+  background: rgba(255, 255, 255, 0.9);
+}
+.jungle-input.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+/* Textarea variant */
+.jungle-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid rgba(160, 200, 170, 0.55);
+  border-radius: 0.625rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  background: rgba(255, 255, 255, 0.72);
+  color: #1a1a1a;
+  resize: vertical;
+  min-height: 70px;
+}
+.jungle-textarea:focus {
+  border-color: #1a5c34;
+  box-shadow: 0 0 0 3px rgba(26, 92, 52, 0.18);
+  background: rgba(255, 255, 255, 0.9);
+}
+.jungle-textarea.error {
+  border-color: #ef4444;
+}
+
+/* ── Section heading ─────────────────────────────────────────── */
+.section-heading {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-jungle-deep);
+  padding: 0.55rem 0.9rem 0.55rem 0.6rem;
+  background: linear-gradient(135deg, rgba(200,168,75,0.16), rgba(200,168,75,0.05));
+  border: 1px solid rgba(200,168,75,0.35);
+  border-radius: 0.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.jungle-btn-primary {
+  background: linear-gradient(135deg, #1a5c34 0%, #0a1e10 100%);
+  color: white;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  box-shadow: 0 4px 16px rgba(15, 45, 26, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  width: 100%;
+  letter-spacing: 0.03em;
+  animation: pulse-jungle 3s ease-in-out infinite;
+}
+.jungle-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2e8a52 0%, #1a5c34 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(15, 45, 26, 0.5), 0 0 0 2px rgba(200,168,75,0.32);
+  animation: none;
+}
+.jungle-btn-primary:active:not(:disabled) { transform: translateY(0); }
+.jungle-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; animation: none; }
+
+.jungle-btn-secondary {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #1a5c34;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.5rem 1.1rem;
+  border-radius: 9999px;
+  border: 2px solid rgba(26,92,52,0.7);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.jungle-btn-secondary:hover {
+  background: #1a5c34;
+  color: white;
+  box-shadow: 0 4px 14px rgba(26,92,52,0.3);
+}
+
+.jungle-btn-danger {
+  background: rgba(255,255,255,0.1);
+  color: #ef4444;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: 2px solid rgba(252,165,165,0.8);
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.jungle-btn-danger:hover { background: rgba(254,226,226,0.85); }
+
+/* ── Toggle button group (Yes/No / Gender) ───────────────────── */
+.toggle-group {
+  display: flex;
+  gap: 0.625rem;
+}
+.toggle-btn {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 0.625rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: 2px solid rgba(160,200,170,0.55);
+  background: rgba(255,255,255,0.55);
+  color: #6b7280;
+}
+.toggle-btn.active {
+  border-color: #1a5c34;
+  background: #1a5c34;
+  color: white;
+  box-shadow: 0 3px 12px rgba(26, 92, 52, 0.35);
+}
+.toggle-btn.active-male   { border-color: #2563eb; background: #2563eb; color: white; box-shadow: 0 3px 10px rgba(37,99,235,0.3); }
+.toggle-btn.active-female { border-color: #db2777; background: #db2777; color: white; box-shadow: 0 3px 10px rgba(219,39,119,0.3); }
+.toggle-btn.active-other  { border-color: #7c3aed; background: #7c3aed; color: white; }
+
+/* ── Error / label helpers ───────────────────────────────────── */
+.error-text {
+  color: #dc2626;
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+  font-weight: 600;
+}
+.jungle-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #2d4a1e;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+}
+.optional-tag {
+  font-size: 0.75rem;
+  color: #6b9e6b;
+  font-weight: 500;
+  margin-left: 0.3rem;
+}
+
+/* ── Consent checkbox rows ───────────────────────────────────── */
+.consent-row {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  background: rgba(200, 168, 75, 0.07);
+  border: 1px solid rgba(200, 168, 75, 0.28);
+  margin-bottom: 0.75rem;
+  transition: background 0.15s, border-color 0.15s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.consent-row:hover {
+  background: rgba(200, 168, 75, 0.12);
+  border-color: rgba(200, 168, 75, 0.42);
+}
+.consent-row.error-row {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.32);
+}
+.consent-checkbox {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  accent-color: #1a5c34;
+  cursor: pointer;
+}
+
+/* ── Sun pulse ───────────────────────────────────────────────── */
+@keyframes sun-pulse {
+  0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 1;    transform: translateX(-50%) scale(1.12); }
+}
+
+/* ── Light beam pulse ────────────────────────────────────────── */
+@keyframes light-pulse {
+  from { opacity: 0.55; }
+  to   { opacity: 1;    }
+}
+
+/* ── Waterfall flow ──────────────────────────────────────────── */
+@keyframes wf-flow {
+  from { transform: translateY(0); }
+  to   { transform: translateY(50%); }
+}
+
+/* ── Waterfall mist pulse ────────────────────────────────────── */
+@keyframes wf-mist {
+  from { opacity: 0.5; transform: scaleX(0.88) scaleY(0.82); }
+  to   { opacity: 0.9; transform: scaleX(1.12) scaleY(1.18); }
+}
+
+/* ── Pool ripple ─────────────────────────────────────────────── */
+@keyframes pool-ripple {
+  0%, 100% { transform: scaleX(1);   opacity: 0.28; }
+  50%       { transform: scaleX(1.25); opacity: 0.12; }
+}
+
+/* ── Butterfly wing flap ─────────────────────────────────────── */
+@keyframes wing-flap {
+  0%, 100% { transform: scaleX(1);   }
+  50%       { transform: scaleX(0.12); }
+}
+
+/* ── Butterfly meandering wander ─────────────────────────────── */
+@keyframes butterfly-wander {
+  0%   { transform: translate(0px,   0px)    rotate(0deg);  }
+  20%  { transform: translate(22px, -18px)   rotate(8deg);  }
+  40%  { transform: translate(45px,  5px)    rotate(-5deg); }
+  60%  { transform: translate(28px,  20px)   rotate(10deg); }
+  80%  { transform: translate(8px,   -8px)   rotate(-8deg); }
+  100% { transform: translate(0px,   0px)    rotate(0deg);  }
+}
+
+/* ── Birds flying right (left→right) ────────────────────────── */
+@keyframes birds-fly-right {
+  from { transform: translateX(-200px); opacity: 0; }
+  3%   { opacity: 1; }
+  96%  { opacity: 1; }
+  to   { transform: translateX(calc(100vw + 200px)); opacity: 0; }
+}
+
+/* ── Birds flying left (right→left) ─────────────────────────── */
+@keyframes birds-fly-left {
+  from { transform: translateX(200px); opacity: 0; }
+  3%   { opacity: 1; }
+  96%  { opacity: 1; }
+  to   { transform: translateX(calc(-100vw - 200px)); opacity: 0; }
+}
+
+/* ── Cloud drift ─────────────────────────────────────────────── */
+@keyframes cloud-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(120vw); }
+}
+
+/* ── Dappled light shift ─────────────────────────────────────── */
+@keyframes dapple-shift {
+  from { transform: translateX(-6px) scaleX(0.94); opacity: 0.65; }
+  to   { transform: translateX(6px)  scaleX(1.06); opacity: 1.0;  }
+}
+
+/* ── Tiger breathe ───────────────────────────────────────────── */
+@keyframes tiger-breathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.015); }
+}
+
+/* ── Foam bubble pop ─────────────────────────────────────────── */
+@keyframes foam-bubble {
+  0%   { transform: scale(0);   opacity: 0;   }
+  35%  { transform: scale(1.2); opacity: 0.5; }
+  100% { transform: scale(0);   opacity: 0;   }
+}
+
+/* ── Bamboo sway ─────────────────────────────────────────────── */
+@keyframes bamboo-sway {
+  0%, 100% { transform: rotate(-1.2deg); }
+  50%       { transform: rotate(1.2deg);  }
+}
+
+/* ── Pool shimmer ────────────────────────────────────────────── */
+@keyframes pool-shimmer {
+  0%, 100% { opacity: 0.08; transform: translateX(-15px); }
+  50%       { opacity: 0.26; transform: translateX(15px);  }
+}
+
+/* ── Water drip on glass (background-position animation) ─────── */
+@keyframes water-drip {
+  from {
+    background-position:
+      14% -40px, 30% -80px, 50% -20px, 67% -60px, 83% -10px;
+  }
+  to {
+    background-position:
+      14% calc(100% + 40px),
+      30% calc(100% + 40px),
+      50% calc(100% + 40px),
+      67% calc(100% + 40px),
+      83% calc(100% + 40px);
+  }
+}
+@keyframes water-drip-light {
+  from { background-position: 22% -50px, 55% -25px, 78% -70px; }
+  to   {
+    background-position:
+      22% calc(100% + 40px),
+      55% calc(100% + 40px),
+      78% calc(100% + 40px);
+  }
+}
+
+/* ── Water drip strips on .jungle-card ──────────────────────── */
+.jungle-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 1rem;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.44) 40%, rgba(255,255,255,0.44) 60%, transparent 100%)
+      14% -40px / 1.5px 40px no-repeat,
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.38) 40%, rgba(255,255,255,0.38) 60%, transparent 100%)
+      30% -80px / 1.5px 40px no-repeat,
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.46) 40%, rgba(255,255,255,0.46) 60%, transparent 100%)
+      50% -20px / 1.5px 40px no-repeat,
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.40) 40%, rgba(255,255,255,0.40) 60%, transparent 100%)
+      67% -60px / 1.5px 40px no-repeat,
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.36) 40%, rgba(255,255,255,0.36) 60%, transparent 100%)
+      83% -10px / 1.5px 40px no-repeat;
+  animation: water-drip 8s linear 2s infinite;
+}
+
+/* ── Water drip strips on .kid-card ─────────────────────────── */
+.kid-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.34) 40%, rgba(255,255,255,0.34) 60%, transparent 100%)
+      22% -50px / 1.5px 36px no-repeat,
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.30) 40%, rgba(255,255,255,0.30) 60%, transparent 100%)
+      55% -25px / 1.5px 36px no-repeat,
+    linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.32) 40%, rgba(255,255,255,0.32) 60%, transparent 100%)
+      78% -70px / 1.5px 36px no-repeat;
+  animation: water-drip-light 9s linear 3.5s infinite;
+}
+
+/* ── Scroll-reveal for form sections ─────────────────────────── */
+.forest-reveal-hidden {
+  opacity: 0;
+  transform: translateY(30px) scale(0.975);
+  transition:
+    opacity  0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.forest-reveal-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.forest-reveal-hidden:nth-child(2) { transition-delay: 0.08s; }
+.forest-reveal-hidden:nth-child(3) { transition-delay: 0.16s; }
+.forest-reveal-hidden:nth-child(4) { transition-delay: 0.24s; }
+.forest-reveal-hidden:nth-child(5) { transition-delay: 0.32s; }
+.forest-reveal-hidden:nth-child(6) { transition-delay: 0.40s; }
+
+/* ── Mobile: reduce rain density ─────────────────────────────── */
+@media (max-width: 640px) {
+  .rain-drop:nth-child(3n+1),
+  .rain-drop:nth-child(3n+2) {
+    display: none;
+  }
+  .jungle-card {
+    padding: 1.25rem;
+    backdrop-filter: blur(16px) saturate(145%) brightness(1.04);
+    -webkit-backdrop-filter: blur(16px) saturate(145%) brightness(1.04);
+  }
+  .kid-card { padding: 1rem; }
+}
+
+/* ── Touch device (Android/iOS): performance optimizations ──── */
+@media (hover: none) and (pointer: coarse) {
+  /* Reduce backdrop-filter blur dramatically */
+  .jungle-card {
+    backdrop-filter: blur(6px) saturate(130%);
+    -webkit-backdrop-filter: blur(6px) saturate(130%);
+  }
+  /* Remove backdrop-filter from kid-cards entirely — use opaque bg */
+  .kid-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(238, 252, 244, 0.88);
+  }
+  .jungle-btn-secondary {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255,255,255,0.25);
+  }
+  .consent-row {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  /* Disable water-drip background-position animation (expensive) */
+  .jungle-card::after,
+  .kid-card::after { animation: none; }
+  /* Disable button pulse animation */
+  .jungle-btn-primary { animation: none; }
+  /* Reduce rain further — keep ~12 drops (hide 4 of every 5) */
+  .rain-drop:nth-child(5n),
+  .rain-drop:nth-child(5n+1),
+  .rain-drop:nth-child(5n+2),
+  .rain-drop:nth-child(5n+3) { display: none; }
+  /* Hero badges/chips — remove blur */
+  .hero-badge,
+  .hero-chip {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* ── Reduced motion: disable parallax and rain ───────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .rain-drop { display: none; }
+  .leaf-animate, .leaf-animate-alt { animation: none; }
+  .glass-reveal { animation: none; }
+}

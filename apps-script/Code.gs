@@ -22,7 +22,7 @@ var DRIVE_FOLDER_NAME = 'VBS Payment Screenshots 2026';
 var STATUS_COLUMN = 21;
 var APPROVED_VAL = 'Approved';
 var CHURCH_ADDRESS = '107, 5th Cross Rd, Chinnapanahalli Main Rd, Doddanekundi, Marathahalli, Bengaluru, Karnataka 560037';
-var CHURCH_EMAIL = 'office@elbethelag.com'; // ← set this to the church email once alias is verified
+var CHURCH_EMAIL = 'ebethelchurch@gmail.com'; // send as church Gmail (must be verified as Send-As alias)
 
 /**
  * Handles POST requests from the registration form.

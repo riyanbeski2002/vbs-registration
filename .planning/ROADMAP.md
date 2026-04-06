@@ -39,7 +39,10 @@ Plans:
   3. The "Day 5 Full Day Picnic" section appears on a pass only when Picnic Consent = "Yes"
   4. Each pass uses Jungle Safari green-palette branding and is visually distinct from plain text output
   5. PDFs are valid file blobs that can be opened and printed
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 02-01-PLAN.md — Rewrite PDF pass generator: landscape A5 ticket layout, jungle green + gold branding, always-present picnic band, logo via base64
 
 ### Phase 3: Email Delivery + Guard
 **Goal**: The parent receives exactly one branded email with all children's passes attached, and re-approving a sent row does nothing
@@ -60,7 +63,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Trigger | 1/1 | Complete   | 2026-03-30 |
-| 2. PDF Pass Generator | 0/TBD | Not started | - |
+| 2. PDF Pass Generator | 0/1 | Not started | - |
 | 3. Email Delivery + Guard | 0/TBD | Not started | - |
 
 ### Phase 4: Redesign PDF pass and email template — fix age bug, polish layout, remove vercel URL, improve email formatting

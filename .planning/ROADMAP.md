@@ -11,7 +11,7 @@ the full loop works end-to-end without manual intervention.
 
 - [x] **Phase 1: Trigger** - Install the installable onEdit trigger and validate it fires only on correct sheet/column/value (completed 2026-03-30)
 - [ ] **Phase 2: PDF Pass Generator** - Generate branded, per-child PDF passes with conditional picnic section
-- [ ] **Phase 3: Email Delivery + Guard** - Send the approval email with PDF attachments and prevent duplicate sends
+- [x] **Phase 3: Email Delivery + Guard** - Send the approval email with PDF attachments and prevent duplicate sends (completed 2026-04-09)
 
 ## Phase Details
 
@@ -67,7 +67,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Trigger | 1/1 | Complete   | 2026-03-30 |
 | 2. PDF Pass Generator | 1/1 | In progress (visual checkpoint pending) | - |
-| 3. Email Delivery + Guard | 0/1 | Planned | - |
+| 3. Email Delivery + Guard | 1/1 | Complete   | 2026-04-09 |
 
 ### Phase 4: Redesign PDF pass and email template — fix age bug, polish layout, remove vercel URL, improve email formatting
 

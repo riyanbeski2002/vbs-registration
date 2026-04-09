@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-03-29)
 
 **Core value:** When a church admin approves a registration, the parent immediately receives confirmation and printable PDF passes for every child — no manual follow-up required.
-**Current focus:** Phase 2 complete — ready for end-to-end live test
+**Current focus:** Phase 3 plan 01 code complete — pending live deployment test (Task 3 checkpoint)
 
 ## Current Position
 
-Phase: 2 of 4 (PDF Pass Generator) — **COMPLETE**
-Plan: 1 of 1 — all tasks done including visual checkpoint (v9 approved)
-Status: Phase 2 done; Phase 3 also implemented; pending live deployment test
+Phase: 3 of 4 (Email Delivery Guard) — **IN PROGRESS**
+Plan: 1 of 1 — Tasks 1-2 complete, Task 3 (live deployment checkpoint) awaiting human verification
+Status: Code complete; pending live test in GAS editor
 
-Last activity: 2026-04-09 — v9 pass design approved (matches reference template), church email from-address added (ebethelchurch@gmail.com), Send-As alias setup pending user action
+Last activity: 2026-04-09 — Phase 3 plan 01 code tasks complete: VBS2026_Pass_ filename fix, HTML email with two-stage error handling, buildEmailHtml() with inline CSS branding
 
-Progress: [████████░░] 75%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -29,7 +29,7 @@ Progress: [████████░░] 75%
 |-------|-------|--------|
 | 01-trigger | 1 | ✓ Complete |
 | 02-pdf-pass-generator | 1 | ✓ Complete |
-| 03-email-delivery | 0 | ✓ Implemented inline with Phase 2 |
+| 03-email-delivery-guard | 1 | In progress (Task 3 checkpoint pending) |
 | 04-redesign | 0 | Addressed by v9 pass + email fix |
 
 ## Accumulated Context
@@ -49,6 +49,10 @@ Progress: [████████░░] 75%
 - Email sends from ebethelchurch@gmail.com via GmailApp `from` param
   - Requires Gmail Send-As alias setup (user pending)
 - clasp not yet authenticated — user copy-pastes Code.gs manually into GAS editor
+- generatePassPdf() sanitizes childName inline (no signature change); blobs named VBS2026_Pass_[safeName].pdf
+- Two-stage error handling in sendApprovalEmail(): PDF stage and mail stage each write 'Error — Email Failed' on catch
+- HTML email via htmlBody option with inline-CSS; plain-text fallback has no forbidden 'Print and bring' copy
+- buildEmailHtml(data) helper added after sendApprovalEmail() — dark green header, VBS branding, footer with ebethelchurch@gmail.com and 9945028989
 
 ### Pending Todos
 
@@ -64,5 +68,5 @@ None blocking — all code complete. Only pending items are user-side actions + 
 ## Session Continuity
 
 Last session: 2026-04-09
-Stopped at: Session end — Phase 2 complete, v9 pass design approved, church email from-address coded. Ready for live deployment test.
-Resume file: none — clean state, no incomplete plans
+Stopped at: 03-01-PLAN.md Task 3 checkpoint:human-verify — copy Code.gs to GAS editor and run live deployment test
+Resume file: .planning/phases/03-email-delivery-guard/03-01-PLAN.md Task 3

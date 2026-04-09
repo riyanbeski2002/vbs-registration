@@ -226,7 +226,21 @@ function readRegistrationRow(row) {
   var values = sheet.getRange(row, 1, 1, 21).getValues()[0];
 
   var kidNames = String(values[8]).split(',').map(function(s) { return s.trim(); });
-  var kidAges  = String(values[9]).split(',').map(function(s) { return s.trim(); });
+  var kidAges  = String(values[9]).split(',').map(function(s) {
+    var raw = s.trim();
+    if (!raw) return '';
+    if (/^\d+$/.test(raw)) return raw; // already a plain number
+    // Date string (e.g. DOB submitted by form) — compute age in years
+    var dob = new Date(raw);
+    if (!isNaN(dob.getTime())) {
+      var now = new Date();
+      var age = now.getFullYear() - dob.getFullYear();
+      var m = now.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+      return (age >= 0 && age <= 25) ? String(age) : '';
+    }
+    return raw;
+  });
 
   var kids = kidNames.map(function(name, i) {
     return { name: name, age: kidAges[i] || '' };

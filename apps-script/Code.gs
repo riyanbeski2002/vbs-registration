@@ -680,7 +680,7 @@ function sendApprovalEmail(data, row) {
   var subject = 'VBS 2026 Registration Approved — ' + data.parentName;
 
   var kidListPlain = data.kids.map(function(k, i) {
-    return (i + 1) + '. ' + k.name + ' (Age ' + k.age + ')';
+    return (i + 1) + '. ' + k.name;
   }).join('\n');
 
   var body = 'Dear ' + data.parentName + ',\n\n'
@@ -720,7 +720,7 @@ function sendApprovalEmail(data, row) {
 
 function buildEmailHtml(data) {
   var kidListHtml = data.kids.map(function(k, i) {
-    return '<li style="margin-bottom:4px;">' + (i + 1) + '. ' + k.name + ' (Age ' + k.age + ')</li>';
+    return '<li style="margin-bottom:4px;">' + (i + 1) + '. ' + k.name + '</li>';
   }).join('');
 
   return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#222;margin:0;padding:0;background:#f4f4f4;">'

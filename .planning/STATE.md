@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-03-29)
 
 **Core value:** When a church admin approves a registration, the parent immediately receives confirmation and printable PDF passes for every child — no manual follow-up required.
-**Current focus:** Phase 3 plan 01 code complete — pending live deployment test (Task 3 checkpoint)
+**Current focus:** Phase 3 complete — all plans verified live. Project functionally complete.
 
 ## Current Position
 
-Phase: 3 of 4 (Email Delivery Guard) — **IN PROGRESS**
-Plan: 1 of 1 — Tasks 1-2 complete, Task 3 (live deployment checkpoint) awaiting human verification
-Status: Code complete; pending live test in GAS editor
+Phase: 3 of 4 (Email Delivery Guard) — **COMPLETE**
+Plan: 1 of 1 — All 3 tasks complete including live deployment test
+Status: Live and verified
 
-Last activity: 2026-04-09 — Phase 3 plan 01 code tasks complete: VBS2026_Pass_ filename fix, HTML email with two-stage error handling, buildEmailHtml() with inline CSS branding
+Last activity: 2026-04-09 — Phase 3 plan 01 fully complete: live test passed — HTML email correct, VBS2026_Pass_ attachments, Status "Approved — Email Sent", duplicate guard confirmed
 
-Progress: [████████░░] 80%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Total execution time: ~0.2 hours
 
 **By Phase:**
@@ -29,8 +29,9 @@ Progress: [████████░░] 80%
 |-------|-------|--------|
 | 01-trigger | 1 | ✓ Complete |
 | 02-pdf-pass-generator | 1 | ✓ Complete |
-| 03-email-delivery-guard | 1 | In progress (Task 3 checkpoint pending) |
+| 03-email-delivery-guard | 1 | ✓ Complete |
 | 04-redesign | 0 | Addressed by v9 pass + email fix |
+| Phase 03-email-delivery-guard P01 | 45 | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -53,20 +54,19 @@ Progress: [████████░░] 80%
 - Two-stage error handling in sendApprovalEmail(): PDF stage and mail stage each write 'Error — Email Failed' on catch
 - HTML email via htmlBody option with inline-CSS; plain-text fallback has no forbidden 'Print and bring' copy
 - buildEmailHtml(data) helper added after sendApprovalEmail() — dark green header, VBS branding, footer with ebethelchurch@gmail.com and 9945028989
+- [Phase 03-email-delivery-guard]: DOB column stores date strings in Sheets — parsed to age in years inline; age removed from children display list
+- [Phase 03-email-delivery-guard]: Live test passed: HTML email correct, VBS2026_Pass_ attachments correct, Status 'Approved — Email Sent', duplicate guard works
 
 ### Pending Todos
 
-- **User action required:** Add ebethelchurch@gmail.com as Send-As alias in personal Gmail → verify
-- **Live test:** Copy Code.gs to GAS editor → run installTrigger() → approve a test row → verify email arrives with PDF passes attached
-- **Age bug check:** Verify age renders as number (not date string) in live test — col 10 in Sheets may be Date object
-- clasp login: run `! clasp login` to authenticate, then `clasp push` will work
+- **User action required:** Add ebethelchurch@gmail.com as Send-As alias in personal Gmail → verify (if not already done)
+- clasp login: run `clasp login` to authenticate, then `clasp push` will work for future deploys
 
 ### Blockers/Concerns
 
-None blocking — all code complete. Only pending items are user-side actions + live test.
+None — project is functionally complete and live.
 
 ## Session Continuity
 
 Last session: 2026-04-09
-Stopped at: 03-01-PLAN.md Task 3 checkpoint:human-verify — copy Code.gs to GAS editor and run live deployment test
-Resume file: .planning/phases/03-email-delivery-guard/03-01-PLAN.md Task 3
+Stopped at: Completed 03-01-PLAN.md — Phase 3 plan 01 all tasks verified live. Project complete.

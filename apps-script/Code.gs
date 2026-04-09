@@ -650,47 +650,95 @@ function generatePassesForRegistration(data) {
  * Logs errors without changing the status cell on failure.
  */
 function sendApprovalEmail(data, row) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+
+  // Stage 1: Generate all PDFs — abort everything if any fail
+  var passPdfs;
   try {
-    var passPdfs = generatePassesForRegistration(data);
+    passPdfs = generatePassesForRegistration(data);
+  } catch (pdfErr) {
+    Logger.log('sendApprovalEmail PDF ERROR row ' + row + ': ' + pdfErr.message);
+    sheet.getRange(row, STATUS_COLUMN).setValue('Error — Email Failed');
+    return;
+  }
 
-    var kidList = data.kids.map(function(k, i) {
-      return (i + 1) + '. ' + k.name + ' (Age ' + k.age + ')';
-    }).join('\n');
+  // Stage 2: Build and send HTML email
+  var subject = 'VBS 2026 Registration Approved — ' + data.parentName;
 
-    var subject = 'VBS 2026 Registration Approved — ' + data.parentName;
+  var kidListPlain = data.kids.map(function(k, i) {
+    return (i + 1) + '. ' + k.name + ' (Age ' + k.age + ')';
+  }).join('\n');
 
-    var body = 'Dear ' + data.parentName + ',\n\n'
-      + 'Great news! Your registration for Jungle Safari VBS 2026 has been approved.\n\n'
-      + '--- Registration Details ---\n'
-      + 'Reference ID : ' + data.submissionId + '\n'
-      + 'Children registered:\n' + kidList + '\n\n'
-      + '--- Event Details ---\n'
-      + 'Dates  : May 11 – 15, 2026 (Monday to Friday)\n'
-      + 'Time   : 10:00 AM – 1:00 PM\n'
-      + (data.picnicConsent === 'Yes' ? 'Day 5  : Full Day Picnic (May 15, 2026)\n' : '')
-      + 'Venue  : El Bethel AG International Church\n'
-      + '         ' + CHURCH_ADDRESS + '\n\n'
-      + 'Please find the VBS admission pass(es) attached to this email — one per child.\n'
-      + 'Print and bring them on the first day.\n\n'
-      + 'We look forward to seeing your child(ren) at the Jungle Safari!\n\n'
-      + 'Warm regards,\n'
-      + 'El Bethel AG International Church\n'
-      + 'VBS 2026 Team';
+  var body = 'Dear ' + data.parentName + ',\n\n'
+    + 'We\'re so excited to have your children at VBS 2026 — Jungle Safari! '
+    + 'Your registration has been approved.\n\n'
+    + '--- Registration Details ---\n'
+    + 'Reference ID : ' + data.submissionId + '\n'
+    + 'Children registered:\n' + kidListPlain + '\n\n'
+    + '--- Event Details ---\n'
+    + 'Dates  : May 11 – 15, 2026 (Monday to Friday)\n'
+    + 'Time   : 10:00 AM – 1:00 PM\n'
+    + (data.picnicConsent === 'Yes' ? 'Day 5  : Full Day Picnic (May 15, 2026)\n' : '')
+    + 'Venue  : El Bethel AG International Church\n'
+    + '         ' + CHURCH_ADDRESS + '\n\n'
+    + 'God bless you! We look forward to a wonderful week with your children.\n\n'
+    + 'Warm regards,\n'
+    + 'El Bethel VBS 2026 Team\n\n'
+    + '---\n'
+    + 'El Bethel AG International Church\n'
+    + CHURCH_ADDRESS + '\n'
+    + 'Email: ebethelchurch@gmail.com | Phone: 9945028989';
 
+  try {
     GmailApp.sendEmail(data.parentEmail, subject, body, {
+      htmlBody: buildEmailHtml(data),
       attachments: passPdfs,
       name: 'El Bethel VBS 2026',
       from: CHURCH_EMAIL,
     });
-
-    // Mark as sent so re-editing "Approved" doesn't trigger another send
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
     sheet.getRange(row, STATUS_COLUMN).setValue('Approved — Email Sent');
-
-    Logger.log('sendApprovalEmail: email sent to ' + data.parentEmail + ' for ' + data.submissionId);
-
-  } catch (err) {
-    Logger.log('sendApprovalEmail ERROR for row ' + row + ': ' + err.message);
-    // Status cell is NOT changed — admin can retry by re-setting to "Approved"
+    Logger.log('sendApprovalEmail: sent to ' + data.parentEmail + ' [' + data.submissionId + ']');
+  } catch (mailErr) {
+    Logger.log('sendApprovalEmail MAIL ERROR row ' + row + ': ' + mailErr.message);
+    sheet.getRange(row, STATUS_COLUMN).setValue('Error — Email Failed');
   }
+}
+
+function buildEmailHtml(data) {
+  var kidListHtml = data.kids.map(function(k, i) {
+    return '<li style="margin-bottom:4px;">' + (i + 1) + '. ' + k.name + ' (Age ' + k.age + ')</li>';
+  }).join('');
+
+  return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#222;margin:0;padding:0;background:#f4f4f4;">'
+    + '<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#ffffff;">'
+    + '<tr><td style="background:#2d5a27;padding:24px 32px;">'
+    + '<h1 style="color:#ffffff;margin:0;font-size:22px;font-weight:bold;">El Bethel AG International Church</h1>'
+    + '<p style="color:#c8e6c9;margin:6px 0 0 0;font-size:15px;">VBS 2026 — Jungle Safari</p>'
+    + '</td></tr>'
+    + '<tr><td style="padding:32px;">'
+    + '<p style="font-size:16px;margin:0 0 12px 0;">Dear ' + data.parentName + ',</p>'
+    + '<p style="margin:0 0 20px 0;">We\'re so excited to have your children at VBS 2026 — Jungle Safari! '
+    + 'Your registration has been approved.</p>'
+    + '<table width="100%" cellpadding="12" cellspacing="0" style="background:#f9f9f9;border:1px solid #ddd;border-radius:4px;margin:0 0 20px 0;">'
+    + '<tr><td><strong>Reference ID:</strong> ' + data.submissionId + '</td></tr>'
+    + '</table>'
+    + '<p style="margin:0 0 8px 0;"><strong>Registered Children:</strong></p>'
+    + '<ul style="margin:0 0 20px 0;padding-left:20px;">' + kidListHtml + '</ul>'
+    + '<p style="margin:0 0 8px 0;"><strong>Event Details:</strong></p>'
+    + '<table cellpadding="4" cellspacing="0" style="margin:0 0 24px 0;">'
+    + '<tr><td style="padding-right:20px;color:#555;white-space:nowrap;">Dates</td><td>May 11 – 15, 2026 (Monday to Friday)</td></tr>'
+    + '<tr><td style="color:#555;">Time</td><td>10:00 AM – 1:00 PM</td></tr>'
+    + (data.picnicConsent === 'Yes' ? '<tr><td style="color:#555;">Day 5</td><td>Full Day Picnic (May 15, 2026)</td></tr>' : '')
+    + '<tr><td style="color:#555;">Venue</td><td>El Bethel AG International Church</td></tr>'
+    + '<tr><td style="color:#555;">Address</td><td>' + CHURCH_ADDRESS + '</td></tr>'
+    + '</table>'
+    + '<p style="margin:0 0 8px 0;">God bless you! We look forward to a wonderful week with your children.</p>'
+    + '<p style="margin:0;">Warm regards,<br><strong>El Bethel VBS 2026 Team</strong></p>'
+    + '</td></tr>'
+    + '<tr><td style="background:#f0f4f0;border-top:1px solid #ddd;padding:16px 32px;">'
+    + '<p style="margin:0;font-size:12px;color:#555;">El Bethel AG International Church<br>' + CHURCH_ADDRESS + '</p>'
+    + '<p style="margin:8px 0 0 0;font-size:12px;color:#555;">Email: ebethelchurch@gmail.com &nbsp;|&nbsp; Phone: 9945028989</p>'
+    + '</td></tr>'
+    + '</table>'
+    + '</body></html>';
 }

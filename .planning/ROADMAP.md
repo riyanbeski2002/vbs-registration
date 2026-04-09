@@ -54,7 +54,10 @@ Plans:
   3. The email body shows: greeting, registration confirmation, submission ID, list of children, VBS dates/times, church address, and contact info
   4. After a successful send, the Status cell reads "Approved — Email Sent" and re-editing the cell to "Approved" does not send another email
   5. If the email send throws an error, Logger.log captures it and the Status cell is NOT changed to "Approved — Email Sent"
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 03-01-PLAN.md — Surgical fix: HTML email body (inline CSS, jungle safari branding), VBS2026_Pass_[ChildName].pdf attachment names, two-stage error handling, remove forbidden copy
 
 ## Progress
 
@@ -64,7 +67,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Trigger | 1/1 | Complete   | 2026-03-30 |
 | 2. PDF Pass Generator | 1/1 | In progress (visual checkpoint pending) | - |
-| 3. Email Delivery + Guard | 0/TBD | Not started | - |
+| 3. Email Delivery + Guard | 0/1 | Planned | - |
 
 ### Phase 4: Redesign PDF pass and email template — fix age bug, polish layout, remove vercel URL, improve email formatting
 

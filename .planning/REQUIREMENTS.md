@@ -24,16 +24,16 @@
 
 ### Email
 
-- [ ] **EMAIL-01**: One email is sent to the parent's email address (col 5)
-- [ ] **EMAIL-02**: Email subject includes the parent name and VBS 2026 branding
-- [ ] **EMAIL-03**: Email body contains: greeting, registration confirmation, submission ID, list of registered children, VBS dates/times, church address, contact info
-- [ ] **EMAIL-04**: Each child's PDF pass is attached to the email
-- [ ] **EMAIL-05**: Email is sent using GmailApp (no external email API)
+- [x] **EMAIL-01**: One email is sent to the parent's email address (col 5)
+- [x] **EMAIL-02**: Email subject includes the parent name and VBS 2026 branding
+- [x] **EMAIL-03**: Email body contains: greeting, registration confirmation, submission ID, list of registered children, VBS dates/times, church address, contact info
+- [x] **EMAIL-04**: Each child's PDF pass is attached to the email
+- [x] **EMAIL-05**: Email is sent using GmailApp (no external email API)
 
 ### Duplicate Guard
 
-- [ ] **GUARD-01**: After successful send, status is updated to "Approved — Email Sent" to prevent re-send
-- [ ] **GUARD-02**: If email send fails, an error is logged via Logger.log and the status is NOT changed
+- [x] **GUARD-01**: After successful send, status is updated to "Approved — Email Sent" to prevent re-send
+- [x] **GUARD-02**: If email send fails, an error is logged via Logger.log and the status is NOT changed
 
 ## v2 Requirements
 
@@ -71,13 +71,13 @@
 | PASS-06 | Phase 2 | Complete (02-01) |
 | PASS-07 | Phase 2 | Complete (02-01) |
 | PASS-08 | Phase 2 | Complete (02-01) |
-| EMAIL-01 | Phase 3 | Pending |
-| EMAIL-02 | Phase 3 | Pending |
-| EMAIL-03 | Phase 3 | Pending |
-| EMAIL-04 | Phase 3 | Pending |
-| EMAIL-05 | Phase 3 | Pending |
-| GUARD-01 | Phase 3 | Pending |
-| GUARD-02 | Phase 3 | Pending |
+| EMAIL-01 | Phase 3 | Complete |
+| EMAIL-02 | Phase 3 | Complete |
+| EMAIL-03 | Phase 3 | Complete |
+| EMAIL-04 | Phase 3 | Complete |
+| EMAIL-05 | Phase 3 | Complete |
+| GUARD-01 | Phase 3 | Complete |
+| GUARD-02 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 18 total

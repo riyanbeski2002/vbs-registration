@@ -67,7 +67,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Trigger | 1/1 | Complete   | 2026-03-30 |
 | 2. PDF Pass Generator | 1/1 | In progress (visual checkpoint pending) | - |
-| 3. Email Delivery + Guard | 1/1 | Complete   | 2026-04-09 |
+| 3. Email Delivery + Guard | 1/1 | Complete    | 2026-04-09 |
 
 ### Phase 4: Redesign PDF pass and email template — fix age bug, polish layout, remove vercel URL, improve email formatting
 

@@ -622,13 +622,14 @@ function buildPassHtml(childName, childAge, picnicConsent, submissionId) {
 }
 
 function generatePassPdf(childName, childAge, picnicConsent, submissionId) {
+  var safeName = childName.replace(/[\/\\:*?"<>|]/g, '_');
   var html = buildPassHtml(childName, childAge, picnicConsent, submissionId);
   var tempFile = DriveApp.createFile(
-    Utilities.newBlob(html, 'text/html', childName + '-pass.html')
+    Utilities.newBlob(html, 'text/html', safeName + '-pass.html')
   );
   var pdfBlob;
   try {
-    pdfBlob = tempFile.getAs('application/pdf').setName(childName + ' - VBS Pass 2026.pdf');
+    pdfBlob = tempFile.getAs('application/pdf').setName('VBS2026_Pass_' + safeName + '.pdf');
   } finally {
     tempFile.setTrashed(true);
   }

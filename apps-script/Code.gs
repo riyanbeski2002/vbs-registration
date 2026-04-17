@@ -32,21 +32,24 @@ function doPost(e) {
     var payload = JSON.parse(e.postData.contents);
 
     // ── Validate required fields ──────────────────────────────
-    if (!payload.parentName || !payload.phone || !payload.kids || !payload.file) {
+    if (!payload.parentName || !payload.phone || !payload.kids) {
       throw new Error('Missing required fields');
     }
     if (!Array.isArray(payload.kids) || payload.kids.length === 0) {
       throw new Error('At least one child is required');
     }
 
-    // ── Save payment screenshot to Google Drive ───────────────
-    var fileData  = payload.file;
-    var decoded   = Utilities.base64Decode(fileData.base64Content);
-    var blob      = Utilities.newBlob(decoded, fileData.mimeType, fileData.filename);
-    var folder    = getOrCreateFolder(DRIVE_FOLDER_NAME);
-    var driveFile = folder.createFile(blob);
-    driveFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    var fileUrl = driveFile.getUrl();
+    // ── Save payment screenshot to Google Drive (optional) ───────────────
+    var fileUrl = '';
+    if (payload.file && payload.file.base64Content) {
+      var fileData  = payload.file;
+      var decoded   = Utilities.base64Decode(fileData.base64Content);
+      var blob      = Utilities.newBlob(decoded, fileData.mimeType, fileData.filename);
+      var folder    = getOrCreateFolder(DRIVE_FOLDER_NAME);
+      var driveFile = folder.createFile(blob);
+      driveFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      fileUrl = driveFile.getUrl();
+    }
 
     // ── Flatten kid arrays ────────────────────────────────────
     var kidNames      = payload.kids.map(function(k) { return k.name; }).join(', ');

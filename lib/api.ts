@@ -9,7 +9,7 @@ export async function submitRegistration(
     throw new Error('Apps Script URL is not configured');
   }
 
-  const base64Content = await fileToBase64(form.paymentFile!);
+  const base64Content = form.paymentFile ? await fileToBase64(form.paymentFile) : null;
 
   const payload = {
     parentName: form.parentName.trim(),
@@ -30,11 +30,11 @@ export async function submitRegistration(
     consentPicnic: form.consentPicnic,
     consentPhoto: form.consentPhoto,
     pickupAuthorization: form.pickupAuthorization.trim(),
-    file: {
-      filename: form.paymentFile!.name,
-      mimeType: form.paymentFile!.type,
+    file: form.paymentFile ? {
+      filename: form.paymentFile.name,
+      mimeType: form.paymentFile.type,
       base64Content,
-    },
+    } : null,
   };
 
   // IMPORTANT: Must use Content-Type: text/plain to avoid CORS preflight.

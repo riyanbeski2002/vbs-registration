@@ -76,11 +76,12 @@ export default function UploadSection({ file, onChange, error }: UploadSectionPr
   return (
     <div className="jungle-card">
       <h2 className="section-heading">
-        <span>📸</span> Upload Payment Screenshot
+        <span>📸</span> Upload Payment Screenshot{' '}
+        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280' }}>(Optional)</span>
       </h2>
 
       <p style={{ color: '#4b5563', fontSize: '0.92rem', marginBottom: '1rem', fontWeight: 600 }}>
-        After making the payment, upload a clear screenshot of the confirmation.{' '}
+        If you have made the payment, upload a clear screenshot of the confirmation.{' '}
         <span style={{ color: '#6b7280' }}>(Max 5 MB — JPG, PNG, WebP, or PDF)</span>
       </p>
 

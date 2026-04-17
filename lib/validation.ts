@@ -82,12 +82,12 @@ export function validateForm(form: FormState): FormErrors {
     errors.regularChurchMember = 'Please select an option';
   }
 
-  if (!form.paymentFile) {
-    errors.paymentFile = 'Please upload your payment screenshot';
-  } else if (form.paymentFile.size > MAX_FILE_SIZE_BYTES) {
-    errors.paymentFile = 'File must be under 5 MB';
-  } else if (!ACCEPTED_MIME_TYPES.includes(form.paymentFile.type)) {
-    errors.paymentFile = 'Only JPEG, PNG, WebP, or PDF files are allowed';
+  if (form.paymentFile) {
+    if (form.paymentFile.size > MAX_FILE_SIZE_BYTES) {
+      errors.paymentFile = 'File must be under 5 MB';
+    } else if (!ACCEPTED_MIME_TYPES.includes(form.paymentFile.type)) {
+      errors.paymentFile = 'Only JPEG, PNG, WebP, or PDF files are allowed';
+    }
   }
 
   if (!form.consentGeneral) {

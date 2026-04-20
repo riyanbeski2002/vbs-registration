@@ -64,27 +64,6 @@ export default function SubmitSection({ status, errorMessage }: SubmitSectionPro
         🔒 Your information is safe and will only be used for VBS registration.
       </p>
 
-      {/* Contact help line */}
-      <div style={{
-        marginTop: '1.25rem',
-        textAlign: 'center',
-        padding: '0.75rem 1rem',
-        background: 'rgba(255,255,255,0.35)',
-        border: '1px solid rgba(200,168,75,0.3)',
-        borderRadius: '0.625rem',
-        fontSize: '0.82rem',
-        color: '#374151',
-        lineHeight: 1.6,
-      }}>
-        <span style={{ fontWeight: 700, color: '#1a5c34' }}>Need help?</span> Contact us at{' '}
-        <a href="tel:+919343715552" style={{ color: '#1a5c34', fontWeight: 700, textDecoration: 'none' }}>
-          +91 93437 15552
-        </a>
-        {' '}or{' '}
-        <a href="mailto:ebethelchurch@gmail.com" style={{ color: '#1a5c34', fontWeight: 700, textDecoration: 'none' }}>
-          ebethelchurch@gmail.com
-        </a>
-      </div>
     </div>
   );
 }

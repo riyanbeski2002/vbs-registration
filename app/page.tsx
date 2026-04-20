@@ -135,6 +135,31 @@ export default function RegistrationPage() {
           </div>
         )}
 
+        {/* Contact help banner */}
+        <div style={{
+          textAlign: 'center',
+          padding: '0.875rem 1.25rem',
+          marginBottom: '1.25rem',
+          background: 'rgba(255,255,255,0.42)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(200,168,75,0.4)',
+          borderRadius: '0.75rem',
+          fontSize: '1rem',
+          fontWeight: 700,
+          color: '#1a1a1a',
+          lineHeight: 1.7,
+        }}>
+          Need help with registration? Contact us:{' '}
+          <a href="tel:+919343715552" style={{ color: '#1a5c34', fontWeight: 800, textDecoration: 'none' }}>
+            +91 93437 15552
+          </a>
+          {' '}·{' '}
+          <a href="mailto:ebethelchurch@gmail.com" style={{ color: '#1a5c34', fontWeight: 800, textDecoration: 'none' }}>
+            ebethelchurch@gmail.com
+          </a>
+        </div>
+
         <form onSubmit={handleSubmit} noValidate>
           <div className="forest-reveal-hidden">
             <ParentDetailsForm

@@ -150,7 +150,7 @@ export default function RegistrationPage() {
           color: '#1a1a1a',
           lineHeight: 1.7,
         }}>
-          Need help with registration? Contact us:{' '}
+          Have Questions? Contact us:{' '}
           <a href="tel:+919343715552" style={{ color: '#1a5c34', fontWeight: 800, textDecoration: 'none' }}>
             +91 93437 15552
           </a>
